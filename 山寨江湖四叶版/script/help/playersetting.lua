@@ -12,7 +12,7 @@ local function initGameSetting()
 	
 	--下面的这些字段是游戏中可调整设置的,但队友等级上限和武功数量上限、武功的等级上限改小的话，需要重新开档
 
-	HHH_GAME_SETTING["WG_COUNT_MAX"]								= 12		-- 每个人的武功数量上限
+	HHH_GAME_SETTING["WG_COUNT_MAX"]								= 50		-- 每个人的武功数量上限
 	
 	HHH_GAME_SETTING["EnableMusic"]									= 1			-- 是否打开音乐
 	HHH_GAME_SETTING["EnableSound"]									= 1			-- 是否打开音效

@@ -144,8 +144,8 @@ function LianGong()
   JY.Person[446]["头像代号"] = math.random(190)
   --JY.Person[445]["生命最大值"] = 1
   --JY.Person[446]["生命最大值"] = 1
-  JY.Person[445]["生命"] = 1 --JY.Person[445]["生命最大值"]
-  JY.Person[446]["生命"] = 1 --JY.Person[446]["生命最大值"]
+  JY.Person[445]["生命"] = 2000 --JY.Person[445]["生命最大值"]
+  JY.Person[446]["生命"] = 2000 --JY.Person[446]["生命最大值"]
   instruct_6(226, 8, 0, 1)
   JY.Person[445]["等级"] = 10
   JY.Person[446]["等级"] = 10
@@ -298,17 +298,17 @@ function DYRW()
 		CC.DYRW = id
 		DrawStrBox(x1, y1, "请选择挑战难度",C_WHITE, CC.DefaultFont)
 		menu = {			
-			{"初级",nil,0}, --3
-			{"进阶",nil,0}, --4
-			{"中级",nil,0}, --5
-			{"高级",nil,0}, --6
-			{"神级",nil,0}, --7
+			{"初级",nil,1}, --3
+			{"进阶",nil,1}, --4
+			{"中级",nil,1}, --5
+			{"高级",nil,1}, --6
+			{"神级",nil,1}, --7
 		}		
-		if JY.Person[id]["挑战"] + 1 > #menu then
-			say("已经没有挑战对手了。", 232, 1, "百事通");
-			do return end
-		end
-		menu[JY.Person[id]["挑战"] + 1][3] = 1
+		--if JY.Person[id]["挑战"] + 1 > #menu then
+		--	say("已经没有挑战对手了。", 232, 1, "百事通");
+		--	do return end
+		--end
+		--menu[JY.Person[id]["挑战"] + 1][3] = 1
 		numItem = table.getn(menu);
 		local rr = ShowMenu(menu,numItem,0,x1,y1+40,0,0,1,1,size,C_ORANGE,C_WHITE);		
 		if rr > 0 then
@@ -1110,10 +1110,10 @@ OEVENTLUA[4100] = function()
 	
 	instruct_0();
 	
-	if JY.Base["物品2"] == 234 then
-		say("你手里还有介绍信，赶紧先去入门",picid,1,"开局助手");
+	if 234 == 234 then
+		--say("你手里还有介绍信，赶紧先去入门",picid,1,"开局助手");
 		
-	else
+	--else
 		local title = "是否搜刮减道德的箱子";
 		local str = "是：搜刮之后道德为46*否：不搜刮减道德箱子*放弃：不使用自动搜刮功能";
 		local btn = {"是","否","放弃"};
@@ -1121,6 +1121,10 @@ OEVENTLUA[4100] = function()
 		local r = JYMsgBox(title,str,btn,num);
 		
 		if r == 3 then
+			say("送你点礼物收好",picid,1,"开局助手");
+			
+			instruct_2(210,100+math.random(100));   --  2(2):得到物品[食材][10]
+			instruct_2(209,100+math.random(100)); 
 			return;
 		end
 	
@@ -1795,7 +1799,7 @@ OEVENTLUA[4100] = function()
 		end
 	
 		say("好了，不要再问我话了，我是木头人",picid,1,"开局助手");
-		instruct_3(-2,-2,1,0,0,0,0,2568,2568,2568,0,0,0);
+		--instruct_3(-2,-2,1,0,0,0,0,2568,2568,2568,0,0,0);
 	end
 end
 

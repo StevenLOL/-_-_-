@@ -18770,13 +18770,14 @@ else
       end
         
       --吼过之后，内力为0，内力最大值-100，并且用声望控制上限
-      if inteam(pid) then
-        JY.Person[pid]["内力"] = 0
-        JY.Person[pid]["内力最大值"] = JY.Person[pid]["内力最大值"] - 100
-        JY.Person[578]["半身像"] = JY.Person[578]["半身像"] + 1	--武骧金星：修正杨过内力上限BUG
-      else
+	  --steven
+      --if inteam(pid) then
+      --  JY.Person[pid]["内力"] = 0
+      --  JY.Person[pid]["内力最大值"] = JY.Person[pid]["内力最大值"] - 100
+      --  JY.Person[578]["半身像"] = JY.Person[578]["半身像"] + 1	--武骧金星：修正杨过内力上限BUG
+      --else
         AddPersonAttrib(pid, "内力", -1000)  --做敌方内力只减1000，额
-      end
+      --end
       
       if JY.Person[pid]["内力最大值"] < 500 then
         JY.Person[pid]["内力最大值"] = 500
@@ -22382,11 +22383,12 @@ else
 			nl = math.modf(nl / 2)
 		end
 	else
-		if inteam(pid) then
-			nl = math.modf((level + 3) / 2) * JY.Wugong[wugong]["消耗内力点数"]
-		else
+		--steven
+		--if inteam(pid) then
+		--nl = math.modf((level + 3) / 2) * JY.Wugong[wugong]["消耗内力点数"]
+		--else
 			nl = math.modf((level + 3) / 4) * JY.Wugong[wugong]["消耗内力点数"]
-		end
+		--end
 	end
 
 	--纯阳无极功消耗内力减25%-50%
@@ -27962,11 +27964,12 @@ function GetJiqi()
     if not WAR.Person[i]["死亡"] then
       local id = WAR.Person[i]["人物编号"]
       local nsyxjq = 0
-      if inteam(id) then
-        nsyxjq = math.modf(JY.Person[id]["受伤程度"] / 10*1.5)
-      else
+	  --steven
+      --if inteam(id) then
+      --  nsyxjq = math.modf(JY.Person[id]["受伤程度"] / 10*1.5)
+      --else
         nsyxjq = math.modf(JY.Person[id]["受伤程度"] / 15)
-      end
+      --end
 	  if T11CJR(id) then nsyxjq = 0 end
 	  if MPPD(id) == 11 and MPDJ(id) > 2 then nsyxjq = 0 end
       WAR.Person[i].TimeAdd = math.modf(getnewmove(WAR.Person[i]["轻功"]*0.7, inteam(id)) + getnewmove1(JY.Person[id]["内力"]/5, JY.Person[id]["内力最大值"]/5, inteam(id)) - JY.Person[id]["中毒程度"] / 20 - nsyxjq + JY.Person[id]["体力"] / 30 + 5)
@@ -28093,6 +28096,8 @@ function GetJiqi()
 	  
       --敌人根据难度集气速度额外增加
 	  --nino: 伪主角模式队友不加集气
+	  --steven
+	  --[[
       if not inteam(id) then
         if JY.Thing[202][WZ7] == 1 then
           WAR.Person[i].TimeAdd = math.modf(WAR.Person[i].TimeAdd * 0.9)
@@ -28100,7 +28105,7 @@ function GetJiqi()
           WAR.Person[i].TimeAdd = math.modf(WAR.Person[i].TimeAdd * 1.1)
 		end
       end	  
-	  
+	  ]]
 	  local jp = math.modf(JY.Person[id]["实战"] / 50) --实战加集气速度--1-28-
 	  WAR.Person[i].TimeAdd = math.modf(WAR.Person[i].TimeAdd * (1 + (jp * 0.01)))  --1-28-
 
@@ -28593,7 +28598,8 @@ function GetJiqi()
 	  	WAR.Person[i].TimeAdd = WAR.Person[i].TimeAdd + math.modf(WAR.LXZT[0]/15)
 	  end
 	        
-      if WAR.ZDDH == 128 and inteam(id) == false and not DT(id, 553) and JY.Thing[202][WZ7] > 1 then
+      --if WAR.ZDDH == 128 and inteam(id) == false and not DT(id, 553) and JY.Thing[202][WZ7] > 1 then
+	  if WAR.ZDDH == 128 and not DT(id, 553) and JY.Thing[202][WZ7] > 1 then
         WAR.Person[i].TimeAdd = WAR.Person[i].TimeAdd + 10
       end
 
@@ -30847,9 +30853,10 @@ end
 				else
 					LK = math.modf((mm - JY.Person[pid]["生命"]) * 0.1)
 				end
-				if not inteam (pid) then
+				--steven
+				--[[if not inteam (pid) then
 					LK = LK + math.random (50)
-				end
+				end]]
 				AddPersonAttrib(pid, "生命", LK)
 				DrawStrBox(-1, -1, CC.WARS9 .. LK, C_ORANGE, CC.DefaultFont)
 				ShowScreen()
@@ -40220,11 +40227,12 @@ function DrawTimeBar2()
 			      if PersonGT(pid, 100) then			--先天功主功体，当集气被杀到-500，内伤直接清0
 			      	JY.Person[pid]["受伤程度"] = 0;
 			      elseif JY.Person[pid]["受伤程度"] < 100 then
-			        if inteam(pid) then
-			        	AddPersonAttrib(pid, "受伤程度", Rnd(4) + 1)		--我方被减集气时受到的内伤
-			        else
+				    --steven
+			        --if inteam(pid) then
+			        	--AddPersonAttrib(pid, "受伤程度", Rnd(4) + 1)		--我方被减集气时受到的内伤
+			        --else
 			        	AddPersonAttrib(pid, "受伤程度", Rnd(3) + 1)		--敌方内伤
-			        end     
+			        --end     
 			      end
 			   end
 				  if wglw(pid,101) or (DT(pid,117) and PersonKF(pid,101)) then --唯我独尊--17-2-27
@@ -54957,10 +54965,12 @@ function War_ExecuteMenu_Sub(x1, y1, flag, thingid)
     WAR.Person[WAR.CurID]["经验"] = WAR.Person[WAR.CurID]["经验"] + 1
     AddPersonAttrib(pid, "体力", -2)
   end
+  --steven
   
-  if inteam(pid) then
+  --[[if inteam(pid) then
     AddPersonAttrib(pid, "体力", -4)
-  end
+  end]]
+  
   return 1
 end
 --War_FightSelectType 
@@ -55533,11 +55543,12 @@ function War_RestMenu()
 	  if WAR.Person[WAR.CurID]["移动步数"] > 0 then
 	    vv = vv + 2
 	  end
-	  if inteam(pid) then
-	    vv = vv + math.random(3)
-	  else
+	  --steven
+	  --if inteam(pid) then
+	  --  vv = vv + math.random(3)
+	  --else
 	    vv = vv + 2 + math.random(4)
-	  end
+	  --end
 	  vv = (vv) / 120
 	  local v = 3 + Rnd(3)
 	  AddPersonAttrib(pid, "体力", v)
@@ -56934,16 +56945,20 @@ function UseThingEffect(id, personid)
     add = math.modf(add)
     
     if JY.Status == GAME_WMAP then
-	    if inteam(personid) then
+	   --steven
+	    --if inteam(personid) then
 	      WAR.Person[WAR.CurID]["内伤点数"] = AddPersonAttrib(personid, "受伤程度", -math.modf(add / 10))
-	    else
-	      WAR.Person[WAR.CurID]["内伤点数"] = AddPersonAttrib(personid, "受伤程度", -math.modf(add / 4))
-	    end
+	    --else
+	    --  WAR.Person[WAR.CurID]["内伤点数"] = AddPersonAttrib(personid, "受伤程度", -math.modf(add / 4))
+	    --end
 	  end
 	  --敌人吃药效果加倍
+	  --steven
+	  --[[
 	  if not inteam(personid) then
 	  	add = add * 2;
 	  end
+	  ]]
     addvalue, str[strnum] = AddPersonAttrib(personid, "生命", add)
     
     --蓝烟清：显示生命点数
@@ -57249,9 +57264,12 @@ function War_ExecuteMenu_Sub(x1, y1, flag, thingid)
     AddPersonAttrib(pid, "体力", -2)
   end
   
+  --steven
+  --[[
   if inteam(pid) then
     AddPersonAttrib(pid, "体力", -4)
   end
+  ]]
   return 1
 end
 
@@ -59741,9 +59759,11 @@ function LJJL(pid)
 	local LJ4 = (11 - JY.Person[pid]["生命增长"]) * 2
 	local LJ = 0
 	LJ = math.modf(LJ1 + LJ2 + LJ3 + LJ4)
-	if not inteam(pid) then   
+	--steven
+	--[[if not inteam(pid) then   
 		LJ = LJ + 10    --敌人连击+10
-	end
+	end]]
+	
 	if PersonKF(pid, 47) then --独孤九剑连击+10
 		LJ = LJ + 10
 	end
@@ -59836,10 +59856,10 @@ function BJJL(pid)
 	local BJ4 = JY.Person[pid]["生命增长"] * 2
 	local BJ = 0
     BJ = math.modf(BJ1 + BJ2 + BJ3 + BJ4)
-
-    if not inteam(pid) then
+	--steven
+    --[[if not inteam(pid) then
     	BJ = BJ + 10     --敌人+10点
-    end
+    end]]
 
 	if JY.Status == GAME_WMAP then
 		if pid == 0 and putong() == 11 then
