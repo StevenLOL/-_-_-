@@ -1995,6 +1995,9 @@ end
 function gettitle(pid)
 	local title = ""
 	local name = JY.Person[pid]["姓名"]
+	if pid == 77 and GetS(99,0,1,0) > 0 then 
+	   name = "萧中慧1"
+	end  
 	if pid == 0 then
 		if zjtype() == 1 then
 			title = ZJTF[putong()]
@@ -2458,6 +2461,9 @@ function NLJS(id, page) --能力说明
 	if zjtype() == 1 and id == 0 then
 		name = tostring(putong())
 	end	
+	if id == 77 and GetS(99,0,1,0) > 0 then 
+	   name = "萧中慧1"
+	end   
 	if id == 92 and name ~= "郭襄" and name ~= "陆无双" and name ~= "苗若兰" and name ~= "森九岚" then name = "92" end --武骧金星：增加特殊山洞女主
 	x1 = dx + 5 + size
 	y1 = dy + 5
