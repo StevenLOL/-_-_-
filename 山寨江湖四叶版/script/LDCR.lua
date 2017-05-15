@@ -29530,6 +29530,12 @@ function WarMain(warid, isexp)
   local haszj = 0
   for a = 0, WAR.PersonNum - 1 do 
 	local aa = WAR.Person[a]["人物编号"]
+		  for ii = 1,HHH_GAME_SETTING["WG_COUNT_MAX"] do 
+				if JY.Person[aa]["武功"..ii] == nil then 
+				JY.Person[aa]["武功"..ii]=0
+				end
+		  end
+	
 	if aa == zj() then haszj = 1 end
   end	
   joinPet()
@@ -30847,6 +30853,11 @@ end
 				if JY.Person[pid]["生命最大值"] < 1500 then
 					mm = JY.Person[pid]["生命最大值"]
 				end
+				--steven
+				if inteam(pid) then
+				   AddPersonAttrib(pid, "体力", 3)
+				end
+				
 				local LK = nil
 				if PersonGT(pid, 96) then
 					LK = math.modf((mm - JY.Person[pid]["生命"]) * 0.2)
