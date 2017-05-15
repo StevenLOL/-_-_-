@@ -32951,6 +32951,11 @@ end
 					instruct_32(JY.Person[enid]["携带物品" .. j], JY.Person[enid]["携带物品数量" .. j]);
 			    end
 			  end
+		else
+			local enid = WAR.Person[i]["人物编号"];
+			JY.Person[enid]["生命"] = JY.Person[enid]["生命最大值"]
+			JY.Person[enid]["内力"] = JY.Person[enid]["内力最大值"]
+			JY.Person[enid]["体力"] = 100
     	end	
     end
 	
