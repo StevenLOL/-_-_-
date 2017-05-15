@@ -32924,6 +32924,22 @@ end
 		addthing(332, 1)		
 	end
     
+	--steven
+	--[[战斗胜利，可随机偷取敌人身上的物品]]
+    for i = 0, WAR.PersonNum - 1 do
+    	if WAR.Person[i]["我方"] == false then
+    		local enid = WAR.Person[i]["人物编号"];
+    		for j=1, 4 do
+	    		if JY.Person[enid]["携带物品数量" .. j] ~= nil and 0 < JY.Person[enid]["携带物品数量" .. j] and -1 < JY.Person[enid]["携带物品" .. j]  then --and JY.Person[enid]["携带物品" .. j] < 26 
+					--tnum = tnum + 1
+					--thing[tnum] = {JY.Person[enid]["携带物品" .. j], enid, j}
+					DrawStrBoxWaitKey(string.format("获得战利品：%s %d个", JY.Thing[JY.Person[enid]["携带物品" .. j]]["名称"], JY.Person[enid]["携带物品数量" .. j]), C_GOLD, CC.DefaultFont)
+					instruct_32(JY.Person[enid]["携带物品" .. j], JY.Person[enid]["携带物品数量" .. j]);
+			    end
+			  end
+    	end	
+    end
+	
     --[[蓝烟清：战斗胜利，可随机偷取敌人身上的物品，只偷取药品
     local thing = {};
     local tnum = 0;
