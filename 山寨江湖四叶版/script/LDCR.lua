@@ -28770,10 +28770,13 @@ function GetJiqi()
 		 else 
 		 WAR.Person[i].TimeAdd = WAR.YDSD[id]
 		 end
-	  end	 
+	  end	
+		--steven
+		--[[
       if WAR.Person[i].TimeAdd > 100 then
         WAR.Person[i].TimeAdd = 100
       end
+	  ]]
       --木桩不集气
       if (id == 445 or id == 446) and WAR.ZDDH == 226 then
         WAR.Person[i].TimeAdd = 0
@@ -33089,7 +33092,7 @@ function AddPersonAttrib(id, str, value)
   
   if str == "内力最大值" then
     local nlmax = math.modf((JY.Person[id]["资质"] - 1) / 5) --5资质为一档，一档=250内
-	attribmax = 9750 - nlmax * 250
+	attribmax = 9750 - nlmax * 100
 	
 	attribmax  = attribmax + (math.modf((101-JY.Person[id]["资质"])/20) * 300) --资质每少20点上限+300，1资+1500
 		
@@ -40471,9 +40474,12 @@ function DrawTimeBar()
         if DT(jqid, 617) then 
 		   jq3 = 100
 		end   
+		--steven
+		--[[
 		if jq3 > 100 then 
 		   jq3 = 100 
-		end   
+		end 
+         ]]		
 				WAR.Person[i].Time = WAR.Person[i].Time + jq3
 				WAR.JQSDXS[WAR.Person[i]["人物编号"]] = jq3
 				if WAR.LQZ[jqid] == 100 then
@@ -40540,10 +40546,13 @@ function DrawTimeBar()
 	  end
         if DT(jqid, 617) then 
 		   jq3 = 100
-		end		
+		end	
+		--steven
+		--[[
 		if jq3 > 100 then 
 		   jq3 = 100 
-		end  
+		end 
+        ]]		
 				if (PersonKF(jqid, 107) == false or (WAR.HOT[jqid] or 0) >= 20) and WAR.Person[i].TimeAdd > 0 then          
 					local jq = 0; --蓝烟清：逆运集气速度变化           	
 					if WAR.L_NYZH[WAR.Person[i]["人物编号"]] == nil then
@@ -47517,7 +47526,7 @@ dofile (CONFIG.ScriptPath .."data.lua");
   CC.PersonAttribMax["资质"] = 100
   CC.PersonAttribMax["攻击带毒"] = 250
   CC.PersonAttribMax["友好度"] = 100
-  CC.PersonAttribMax["实战"] = 500
+  CC.PersonAttribMax["实战"] = 5000
   CC.NewPersonName = "徐小侠"
   CC.NewGameSceneID = 70
   CC.NewGameSceneX = 16
@@ -57427,23 +57436,24 @@ function ShowPersonStatus(teamid)
   local page = 1
   local pagenum = 2
   local teamnum = GetTeamNum()
+  local wgoffset=0
   while true do
 	page = limitX(page, 1, 2)
     Cls()
     local id = JY.Base["队伍" .. teamid]
 	local name = JY.Person[id]["姓名"]
 	if page == 1 then
-		ShowPersonStatus_sub(id, page)
+		ShowPersonStatus_sub_new(id, page,wgoffset)
 	elseif page == 2 then
 		page = NLJS(id, page)
 		if page == -1 then
 			break
 		end
 		Cls()
-		ShowPersonStatus_sub(id, page)
+		ShowPersonStatus_sub_new(id, page,wgoffset)
 		ShowScreen()
 	else
-		ShowPersonStatus_sub(id, page)
+		ShowPersonStatus_sub_new(id, page,wgoffset)
 	end
     ShowScreen()
     local keypress = WaitKey()
@@ -57452,14 +57462,24 @@ function ShowPersonStatus(teamid)
       break;
     elseif keypress == VK_UP then
       teamid = teamid - 1
+	  wgoffset=0
     elseif keypress == VK_DOWN then
       teamid = teamid + 1
+	  wgoffset=0
     elseif keypress == VK_LEFT then
       page = page - 1
+	  wgoffset=0
     elseif keypress == VK_RIGHT then
       page = page + 1
-    elseif keypress == VK_SPACE or keypress > 1999999 then
-
+	  wgoffset=0
+    elseif keypress == VK_SPACE then
+	  if wgoffset>4 then
+		wgoffset=0
+	  else
+	    wgoffset=wgoffset+1
+	  end
+      --ShowPersonStatus_sub_new(id, page,wgoffset)
+	elseif keypress > 1999999 then
     end
     teamid = limitX(teamid, 1, teamnum)
     page = limitX(page, 1, pagenum)
@@ -57915,7 +57935,7 @@ function ShowPersonStatus_sub(id, page)
 				DrawString(x1 + size * 22, y1 + h * (i+2), JY.Wugong[JY.Person[578]["轻功"]]["名称"], M_Wheat, size)			
 			end
     local nlmax = math.modf((JY.Person[id]["资质"] - 1) / 5) --5资质为一档，一档=250内
-	local attribmax = 9750 - nlmax * 250
+	local attribmax = 9750 - nlmax * 100
 	
 	attribmax  = attribmax + (math.modf((101-JY.Person[id]["资质"])/20) * 300) --资质每少20点上限+300，1资+1500
 	
@@ -58124,6 +58144,669 @@ function ShowPersonStatus_sub(id, page)
 	--DrawString(dx + 170, CC.ScreenH - dy - 27 , "上下键浏览，左右键切换，ESC退出", C_ORANGE, size - 3) --武骧金星：微调位置
 end
 
+function ShowPersonStatus_sub_new(id, page,wgoffset)
+  page = 1
+  local size = 25
+  local size2 = size - 5
+  local p = JY.Person[id]
+  local p0 = JY.Person[0]
+  local width = 18 * size + 15
+  local h = size + CC.PersonStateRowPixel
+  local h2 = h - 5
+  local height = 13 * h + 10
+  local dx = (CC.ScreenW - width) / 2
+  local dy = (CC.ScreenH - height) / 2
+  dx = 0
+  dy = 0
+  local i = 1
+  local x1, y1, x2 = nil, nil, nil
+		lib.PicLoadFile(CC.ThingPicFile[1], CC.ThingPicFile[2], 93)
+		lib.PicLoadCache(93, 2, 500, 300)
+		--lib.PicLoadCache(4, 4, 500, 300)
+  --lib.LoadPicture(CONFIG.PicturePath .. "bj-2.png", 0, 0)
+  --lib.LoadPicture(CONFIG.PicturePath .. "bk2.png", 0, CC.ScreenH-300)
+  --lib.LoadPicture(CONFIG.PicturePath .. "bk3.png", CC.ScreenW/3+2, 0)
+ -- lib.LoadPicture(CONFIG.PicturePath .. "bk4.png", CC.ScreenW/3+2, h*6+4)
+  --lib.LoadPicture(CONFIG.PicturePath .. "bk5.png", CC.ScreenW/3+2, CC.ScreenH-200)
+  DrawBox(dx, dy, CC.ScreenW, CC.ScreenH, M_Wheat)
+  --DrawBox(470, dy, CC.ScreenW, h*7+2, M_Wheat)
+  --DrawBox(270, dy, 468, CC.ScreenH, M_Wheat)
+  --DrawBox(470, h*7+3, CC.ScreenW, CC.ScreenH, M_Wheat)
+  lib.PicLoadCache(93, 4, 500, 300)
+ -- lib.LoadPicture(CONFIG.PicturePath .. "jm2.png", 0, 0)
+ -- lib.LoadPicture(CONFIG.PicturePath .. "jm3.png", 268-6, 0)
+
+  --lib.LoadPicture(CONFIG.PicturePath .. "jm4.png", 0, CC.ScreenH-6)
+ -- lib.LoadPicture(CONFIG.PicturePath .. "bt1.png", 115, 2)
+ -- lib.LoadPicture(CONFIG.PicturePath .. "bt0.png", 0, CC.ScreenH-34)
+  --lib.LoadPicture(CONFIG.PicturePath .. "jm1.png", 0, 0)
+  x1 = dx + 25
+  y1 = dy + 5
+  x2 = 4 * size
+  local headw, headh = lib.PicGetXY(1, p["头像代号"] * 2)
+  local headx = (width / 2 - headw) / 3
+  local heady = (h * 6 - headh) / 6
+  local hid = gethead(id)
+	local title = gettitle(id)
+	if title ~= "" then
+		title = "【"..title.."】"
+	else
+		title = "【※】"
+	end	
+	
+	lib.PicLoadCache(55, hid * 2, dx + 1, CC.ScreenH - dy - 397, 17)
+  lib.PicLoadCache(55, 0, dx + 5, CC.ScreenH - dy - 147, 17)
+    MyDrawString(dx, dx + 260, CC.ScreenH - dy - 77, p[CC.s23], C_WHITE, 30) 
+  MyDrawString(dx, dx + 260, CC.ScreenH - dy - 47, title, C_GOLD, 30) 
+	i = 1
+  
+  DrawString(x1, y1 + h * i, p[CC.s23], C_WHITE, size)
+  DrawString(x1 + 10 * size / 2, y1 + h * i, string.format("%3d", p["等级"]), C_GOLD, size)
+  DrawString(x1 + 13 * size / 2, y1 + h * i, "级", C_ORANGE, size)
+--[[
+   --经验值
+   i = i + 1
+    DrawString(x1, y1 + h * (i), "升级", C_ORANGE, size)
+    local kk = nil
+    if p["等级"] >= 30 then
+      kk = "   ＝"
+    else
+      --kk = 2 * (p["经验"] - CC.Exp[p["等级"] - 1])
+	  kk = 2 * (CC.Exp[p["等级"] + 1] - p["经验"])
+	  local kkk = 10 - string.len(kk)
+		for i = 1, kkk do
+			kk = " "..kk
+		end
+    end
+
+
+    DrawString(x1 + size * 2 + 16, y1 + h * (i), kk, C_GOLD, size)]]
+   --[[ local tmp = nil
+    if CC.Level <= p["等级"] then
+      tmp = "="
+    else
+      tmp = 2 * CC.Exp[p["等级"] + 1]
+    end   
+	i = i + 1
+    DrawString(x1 + size * 2 + 16, y1 + h * (i), "/" .. tmp, C_GOLD, size)  ]]
+  
+  --受伤，流血，中毒，封穴，内力性质等属性
+  local function DrawAttrib(str, color1, color2, v)	
+    if not v then
+      v = 0
+    end
+	if str == "武学常识" then	
+		DrawString(x1, y1 + h * i, "武常", color1, size)
+	elseif str == "特殊兵器" then
+		DrawString(x1, y1 + h * i, "奇门", color1, size)
+	else
+		DrawString(x1, y1 + h * i, string.sub(str, 1, 4), color1, size)
+	end
+    DrawString(x1 + x2 - 60, y1 + h * i, string.format("%5d", p[str] + v), color2, size)
+    i = i + 1
+  end
+
+    local color = nil
+    if p["受伤程度"] < 33 then
+      color = RGB(236, 200, 40)
+    elseif p["受伤程度"] < 66 then
+      color = RGB(244, 128, 32)
+    else
+      color = RGB(232, 32, 44)
+    end
+    i = i + 1
+    DrawString(x1, y1 + h * (i), "生命", C_ORANGE, size)
+    DrawString(x1 + 2 * size, y1 + h * (i), string.format("%5d", p["生命"]), color, size)
+    DrawString(x1 + 9 * size / 2, y1 + h * (i), "/", C_GOLD, size)
+    if p["中毒程度"] == 0 then
+      color = RGB(252, 148, 16)
+    elseif p["中毒程度"] < 50 then
+      color = RGB(120, 208, 88)
+    else
+      color = RGB(56, 136, 36)
+    end
+    DrawString(x1 + 5 * size, y1 + h * (i), string.format("%5s", p["生命最大值"]), color, size)
+    i = i + 1
+    if p["内力性质"] == 0 then
+      color = RGB(208, 152, 208)
+    elseif p["内力性质"] == 1 then
+      color = RGB(236, 200, 40)
+    else
+      color = RGB(236, 236, 236)
+    end
+    if (putong() == 5 and id == 0) or DT(id, 618) or DT(id, JY.Person[618]["无用13"]) then
+      color = RGB(216, 20, 24)
+    end
+    DrawString(x1, y1 + h * (i), "内力", C_ORANGE, size)
+    DrawString(x1 + 2 * size, y1 + h * (i), string.format("%5d/%5d", p["内力"], p["内力最大值"]), color, size)
+    i = i + 1
+    DrawString(x1, y1 + h * (i), "体力", C_ORANGE, size)
+    DrawString(x1 + size * 2 + 8, y1 + h * (i), p["体力"], C_GOLD, size)
+    DrawString(x1 + size * 4 + 10, y1 + h * (i), "体质", C_ORANGE, size)
+    DrawString(x1 + size * 6 + 18, y1 + h * (i), p["生命增长"], C_GOLD, size)
+    i = i + 1
+    
+    --实战
+    DrawString(x1, y1 + h * (i), "实战", C_ORANGE, size)
+
+        local num, cl = JY.Person[id]["实战"], C_GOLD
+        if num > 499 then
+          --if not T11CJR(id) then num = "极" end
+          cl = C_RED
+        end
+        DrawString(x1 + size * 2 + 8, y1 + h * (i), num, cl, size)
+
+    
+    --左右
+    DrawString(x1 + size * 4 + 10, y1 + h * (i), "互搏", C_ORANGE, size)
+    local hb = nil
+    if p["左右互搏"] == 1 then
+      --hb = "◎"
+	  hb = tostring(ZYHBJL(id)).."%"
+    else
+      hb = "※"
+    end
+    DrawString(x1 + size * 6 + 18, y1 + h * (i), hb, C_GOLD, size)
+	i = i + 1 --武骧金星：显示一些额外的信息
+    DrawString(x1, y1 + h * (i), "带毒", C_ORANGE, size)
+	DrawString(x1 + size * 2 + 8, y1 + h * (i), JY.Person[id]["攻击带毒"], M_Green, size)
+    DrawString(x1 + size * 4 + 10, y1 + h * (i), "抗毒", C_ORANGE, size)
+	DrawString(x1 + size * 6 + 18, y1 + h * (i), JY.Person[id]["抗毒能力"], M_DarkOliveGreen, size)
+    --中毒、封穴、流血
+    i = i + 1
+    DrawString(x1, y1 + h * (i), "中毒", C_ORANGE, size)
+    DrawString(x1 + size * 2 + 8, y1 + h * (i), p["中毒程度"], RGB(120, 208, 88), size)
+    DrawString(x1 + size * 4 + 10, y1 + h * (i), "内伤", C_ORANGE, size)
+    DrawString(x1 + size * 6 + 18, y1 + h * (i), p["受伤程度"], C_RED, size)
+	i = i+ 1
+	DrawString(x1, y1 + h * (i), "武常", C_ORANGE, size)
+	DrawString(x1 + size * 2 + 8, y1 + h * (i), p["武学常识"], C_GOLD, size)
+	DrawString(x1 + size * 4 + 10, y1 + h * (i), "资质", C_ORANGE, size)
+	DrawString(x1 + size * 6 + 18, y1 + h * (i), p["资质"], C_GOLD, size)
+    --DrawAttrib("资质", C_WHITE, C_GOLD)
+    --DrawAttrib("武学常识", C_WHITE, C_GOLD)
+	local tmp1, tmp2, tmp3 = 0, 0, 0 --攻防轻
+	local tmp4, tmp5, tmp6, tmp7 = 0, 0, 0, 0 --医毒解暗
+	local tmpa, tmpb, tmpc, tmpd = 0, 0, 0, 0 --拳剑刀特
+    if p["武器"] > -1 then
+      tmp1 = tmp1 + JY.Thing[p["武器"]]["加攻击力"]
+      tmp2 = tmp2 + JY.Thing[p["武器"]]["加防御力"]
+      tmp3 = tmp3 + JY.Thing[p["武器"]]["加轻功"]
+    end
+    if p["防具"] > -1 then
+      tmp1 = tmp1 + JY.Thing[p["防具"]]["加攻击力"]
+      tmp2 = tmp2 + JY.Thing[p["防具"]]["加防御力"]
+      tmp3 = tmp3 + JY.Thing[p["防具"]]["加轻功"]
+    end
+	
+	
+    --nino：门派属性追加
+	tmp1 = tmp1 + MPAttrib(id, 1)
+	tmp2 = tmp2 + MPAttrib(id, 2)
+	tmp3 = tmp3 + MPAttrib(id, 3)
+	tmp4 = tmp4 + MPAttrib(id, 4)
+	tmp5 = tmp5 + MPAttrib(id, 5)
+	tmp6 = tmp6 + MPAttrib(id, 6)
+	tmp7 = tmp7 + MPAttrib(id, 7)	
+    i = 1
+    x1 = dx + width / 2 +55
+
+    DrawAttrib("攻击力", C_WHITE, C_GOLD)
+    if tmp1 > -1 then
+		DrawString(x1 + size * 4, y1 + h, "↑" .. tmp1, M_DIY2, size)
+	else
+		tmp1 = -(tmp1)
+		DrawString(x1 + size * 4, y1 + h , "↓" .. tmp1, M_DIY1, size)
+	end
+    DrawAttrib("防御力", C_WHITE, C_GOLD)
+	if tmp2 > -1 then
+		DrawString(x1 + size * 4, y1  + h * 2, "↑" .. tmp2, M_DIY2, size)
+	else
+		tmp2 = -(tmp2)
+		DrawString(x1 + size * 4, y1  + h * 2, "↓" .. tmp2, M_DIY1, size)
+	end
+    DrawAttrib("轻功", C_WHITE, C_GOLD)
+    if tmp3 > -1 then
+      DrawString(x1 + size * 4, y1 + h * 3, "↑" .. tmp3, M_DIY2, size)
+    else
+      tmp3 = -(tmp3)
+      DrawString(x1 + size * 4 , y1 + h * 3, "↓" .. tmp3, M_DIY1, size)
+    end
+    
+    --能力属性
+    DrawAttrib("医疗能力", C_WHITE, C_GOLD)
+    if tmp4 > -1 then
+      DrawString(x1 + size * 4, y1 + h * 4, "↑" .. tmp4, M_DIY2, size)
+    else
+      tmp4 = -(tmp4)
+      DrawString(x1 + size * 4, y1 + h * 4, "↓" .. tmp4, M_DIY1, size)
+    end	
+    DrawAttrib("用毒能力", C_WHITE, C_GOLD)
+    if tmp5 > -1 then
+      DrawString(x1 + size * 4, y1 + h * 5, "↑" .. tmp5, M_DIY2, size)
+    else
+      tmp5 = -(tmp5)
+      DrawString(x1 + size * 4, y1 + h * 5, "↓" .. tmp5, M_DIY1, size)
+    end	
+    DrawAttrib("解毒能力", C_WHITE, C_GOLD)
+    if tmp6 > -1 then
+      DrawString(x1 + size * 4, y1 + h * 6, "↑" .. tmp6, M_DIY2, size)
+    else
+      tmp6 = -(tmp6)
+      DrawString(x1 + size * 4, y1 + h * 6, "↓" .. tmp6, M_DIY1, size)
+    end		
+    DrawAttrib("拳掌功夫", C_WHITE, C_GOLD)
+	if sixi(id, 1) == 0 then 
+    DrawString(x1 + size * 4 , y1 + h * 7, "↑" .. sixi(id, 1), M_DIY2, size)
+	else 
+	DrawString(x1 + size * 4 , y1 + h * 7, "↑" .. sixi(id, 1) - p["拳掌功夫"], M_DIY2, size)
+	end
+    DrawAttrib("御剑能力", C_WHITE, C_GOLD)
+	if sixi(id, 2) == 0 then 
+    DrawString(x1 + size * 4 , y1 + h * 8, "↑" .. sixi(id, 2), M_DIY2, size)
+	else 
+	DrawString(x1 + size * 4 , y1 + h * 8, "↑" .. sixi(id, 2) - p["御剑能力"], M_DIY2, size)
+	end
+	--DrawString(x1 + size * 4 , y1 + h * 8, "↑" .. sixi(id, 2) - p["御剑能力"], M_DIY2, size)
+    DrawAttrib("耍刀技巧", C_WHITE, C_GOLD)
+	if sixi(id, 3) == 0 then 
+    DrawString(x1 + size * 4, y1 + h * 9, "↑" .. sixi(id, 3), M_DIY2, size)
+	else 
+	DrawString(x1 + size * 4, y1 + h * 9, "↑" .. sixi(id, 3) - p["耍刀技巧"], M_DIY2, size)
+	end
+	--DrawString(x1 + size * 4, y1 + h * 9, "↑" .. sixi(id, 3) - p["耍刀技巧"], M_DIY2, size)
+    DrawAttrib("特殊兵器", C_WHITE, C_GOLD)
+	if sixi(id, 4) == 0 then 
+    DrawString(x1 + size * 4, y1 + h * 10, "↑" .. sixi(id, 4), M_DIY2, size)
+	else 
+	DrawString(x1 + size * 4, y1 + h * 10, "↑" .. sixi(id, 4) - p["特殊兵器"], M_DIY2, size)
+	end
+	--DrawString(x1 + size * 4, y1 + h * 10, "↑" .. sixi(id, 4) - p["特殊兵器"], M_DIY2, size)
+    DrawAttrib("暗器技巧", C_WHITE, C_GOLD)
+	if sixi(id, 5) == 0 then 
+    DrawString(x1 + size * 4 , y1 + h * 11, "↑" .. sixi(id, 5), M_DIY2, size)
+	else 
+	DrawString(x1 + size * 4 , y1 + h * 11, "↑" .. sixi(id, 5) - p["暗器技巧"], M_DIY2, size)
+	end
+	--DrawString(x1 + size * 4 , y1 + h * 11, "↑" .. sixi(id, 5) - p["暗器技巧"], M_DIY2, size)
+  --[[  if tmp7 > -1 then
+      DrawString(x1 + size * 4 - 5, y1 + h * 12, "↑" .. tmp7, M_DIY2, size)
+    else
+      tmp7 = -(tmp7)
+      DrawString(x1 + size * 4 - 5, y1 + h * 12, "↓" .. tmp7, M_DIY1, size)
+    end	]]	
+   -- DrawAttrib("资质", C_WHITE, C_GOLD)
+    --DrawAttrib("武学常识", C_WHITE, C_GOLD)	
+	DrawString(x1, y1 + h * 12, "连击率：", C_GOLD, size)
+	DrawString(x1 + size * 4, y1 + h * 12, tostring(LJJL(id)).."%", M_Wheat, size)
+	DrawString(x1, y1 + h * 13, "暴击率：", C_GOLD, size)
+	DrawString(x1 + size * 4, y1 + h * 13, tostring(BJJL(id)).."%", M_Wheat, size)	
+	
+	DrawString(x1, y1 + h * 14, "加力率：", C_GOLD, size)
+	DrawString(x1 + size * 4, y1 + h * 14, tostring(JLJL(id)).."%", M_Wheat, size)
+	DrawString(x1, y1 + h * 15, "护体率：", C_GOLD, size)
+	DrawString(x1 + size * 4, y1 + h * 15, tostring(HTJL(id)).."%", M_Wheat, size)	
+	i = i +4
+    DrawString(x1, y1 + h * (i), "武器:", C_GOLD, size)
+    if p["武器"] > -1 then
+		DrawString(x1 + size * 3 - 10, y1 + h * (i) + 4, JY.Thing[p["武器"]]["名称"], C_GOLD, size - 7)
+    else
+		DrawString(x1 + 3 + size * 3, y1 + h * (i), "无", C_GOLD, size)
+	end
+    i = i + 1
+    DrawString(x1, y1 + h * (i), "防具:", C_GOLD, size)
+    if p["防具"] > -1 then
+		DrawString(x1 + size * 3 - 10, y1 + h * (i) + 4, JY.Thing[p["防具"]]["名称"], C_GOLD,  size - 7)
+	else	
+		DrawString(x1 + 3 + size * 3, y1 + h * (i), "无", C_GOLD, size)
+    end
+	i = i + 1
+    DrawString(x1, y1 + h * (i), "修炼:", C_GOLD, size)
+    local thingid = p["修炼物品"]
+    if thingid > 0 then
+      DrawString(x1 + size * 3 - 10, y1 + h * (i) + 4, JY.Thing[thingid]["名称"], C_GOLD,  size - 7)
+    else
+      DrawString(x1 + 3 + size * 3, y1 + h * (i), "无", C_GOLD, size)	
+    end			
+	x1 = x1 + 20
+	--lib.PicLoadCache(2, thingid * 2, x1 + size * 2 - 10, y1 + h * (i) + 4, 1)
+	i = 1
+	
+--武功显示
+	if MPPD(id) ~= 0 then
+		local mptype, mpdj = MPDISPLAY(id)
+		if mptype ~= nil then
+		    if MPPD(id) == 11 and XYL(id) and JY.Person[id]["声望"] == 180 and juexing() > 1 then
+			DrawString(x1 + size * 8 - 28, y1 + h * i, "【".."静虚子".."】", M_Wheat, size)
+			elseif MPPD(id) == 11 and DT(id,597) then
+			DrawString(x1 + size * 8 - 28, y1 + h * i, "【".."一刀流妖刀姬".."】", M_Wheat, size)
+			elseif MPPD(id) == 12 and DT(id,73) then
+			DrawString(x1 + size * 8 - 28, y1 + h * i, "【".."日月神教圣姑".."】", M_Wheat, size)
+			elseif MPPD(id) == 13 and DT(id,66) then
+			DrawString(x1 + size * 8 - 28, y1 + h * i, "【".."波斯明教圣女".."】", M_Wheat, size)
+			elseif MPPD(id) == 13 and (ZJ(id) and zjtype() ~= 3) then
+			DrawString(x1 + size * 8 - 28, y1 + h * i, "【".."明教代行使者".."】", M_Wheat, size)
+			else
+			DrawString(x1 + size * 8 - 28, y1 + h * i, "【"..mptype..mpdj.."】", M_Wheat, size)
+			end
+		else
+			DrawString(x1 + size * 8 - 28, y1 + h * i, "【江湖人士】", M_Wheat, size)
+		end
+	else
+		DrawString(x1 + size * 8 - 28, y1 + h * i, "【江湖人士】", M_Wheat, size)
+	end
+	    DrawString(x1 + size * 17+10, y1 + h * i,"外功精通:", C_RED, size)--天赋外功
+		for k, v in ipairs(CC.TFWG) do --豸苗：更多显示
+			if v[1] == id then
+				DrawString(x1 + size * 22, y1 + h * i, JY.Wugong[v[2]]["名称"], M_Wheat, size)	 
+				break
+			end
+			if v[1] == cxzj() and id == 0 then
+				DrawString(x1 + size * 22, y1 + h * i, JY.Wugong[v[2]]["名称"], M_Wheat, size)						
+				break
+			end
+		end
+			if id == 0 and (putong() > 0 or teshu() > 0) then
+				if GetS(112,1,0,0)> 0 then
+				if T9ZY(id) then
+				DrawString(x1 + size * 22, y1 + h * i, "七探蛇盘枪", M_Wheat, size)
+				elseif T12YMZ(id) then
+				DrawString(x1 + size * 22, y1 + h * i, "梨花枪", M_Wheat, size)
+				else
+				DrawString(x1 + size * 22, y1 + h * i, JY.Wugong[GetS(112,1,0,0)]["名称"], M_Wheat, size)		
+			    end
+				end
+		    end
+            if id == 92 and JY.Person[578]["攻击力"] > 0 then
+				DrawString(x1 + size * 22, y1 + h * i, JY.Wugong[JY.Person[578]["攻击力"]]["名称"], M_Wheat, size)		
+			end
+		for k, v in ipairs(CC.TFWG1) do --豸苗：更多显示
+			if v[1] == id then
+				DrawString(x1 + size * 22, y1 + h * (i+1), JY.Wugong[v[2]]["名称"], M_Wheat, size)						
+				break
+			end
+			if v[1] == cxzj() and id == 0 then
+				DrawString(x1 + size * 22, y1 + h * (i+1), JY.Wugong[v[2]]["名称"], M_Wheat, size)					
+				break
+			end
+		end
+	i = i + 1
+	if yongnei(p["声望"]) then
+		DrawString(x1 + size * 8 - 18, y1 + h * i, "主功体:".."【"..JY.Wugong[p["声望"]]["名称"].."】", M_Wheat, size)
+	else
+		DrawString(x1 + size * 8 - 18, y1 + h * i, "主功体:".."【无】", M_Wheat, size)
+	end
+        DrawString(x1 + size * 17+10, y1 + h * (i+1), "内功精通:", M_DeepSkyBlue, size)--天赋内功
+		for k, v in ipairs(CC.TFNG) do --豸苗：更多显示12.26
+			if v[1] == id then
+				DrawString(x1 + size * 22, y1 + h * (i+1), JY.Wugong[v[2]]["名称"], M_Wheat, size)						
+				break
+			end
+			if v[1] == cxzj() and id == 0 then
+				DrawString(x1 + size * 22, y1 + h * (i+1), JY.Wugong[v[2]]["名称"], M_Wheat, size)					
+				break
+			end
+		end
+			if id ==92 and JY.Person[578]["防御力"] > 0 then
+				DrawString(x1 + size * 22, y1 + h * (i+1), JY.Wugong[JY.Person[578]["防御力"]]["名称"], M_Wheat, size)			
+			end
+			if id == 0 and (putong() > 0 or teshu() > 0) then
+				if GetS(112,2,0,0)> 0 then
+				DrawString(x1 + size * 22, y1 + h * (i+1), JY.Wugong[GetS(112,2,0,0)]["名称"], M_Wheat, size)		
+			    end
+		    end
+		for k, v in ipairs(CC.TFNG1) do --豸苗：更多显示
+			if v[1] == id then
+				DrawString(x1 + size * 22, y1 + h * (i+2), JY.Wugong[v[2]]["名称"], M_Wheat, size)						
+				break
+			end
+			if v[1] == cxzj() and id == 0 then
+				DrawString(x1 + size * 22, y1 + h * (i+2), JY.Wugong[v[2]]["名称"], M_Wheat, size)				
+				break
+			end
+		end
+		
+	i = i + 1 --武骧金星：显示潜力
+	DrawString(x1 + size * 8 - 18, y1 + h * i, "内功潜力:", M_Wheat, size)
+	DrawString(x1 + size * 17+10, y1 + h * (i+2), "轻功精通:", M_green1, size)--天赋轻功
+		for k, v in ipairs(CC.TFQG) do --豸苗：更多显示
+			if v[1] == id then
+				DrawString(x1 + size * 22, y1 + h * (i+2), JY.Wugong[v[2]]["名称"], M_Wheat, size)						
+				break
+			end
+			if v[1] == cxzj() and id == 0 then
+				DrawString(x1 + size * 22, y1 + h * (i+2), JY.Wugong[v[2]]["名称"], M_Wheat, size)				
+				break
+			end
+		end
+			if id == 0 and (putong() > 0 or teshu() > 0) then
+				if GetS(112,3,0,0)> 0 then
+				if XYL(id) then
+				DrawString(x1 + size * 22, y1 + h * (i+2), "梯云步", M_Wheat, size)	
+				else
+				DrawString(x1 + size * 22, y1 + h * (i+2), JY.Wugong[GetS(112,3,0,0)]["名称"], M_Wheat, size)	
+		        end	
+				end
+			end
+			if id ==92 and JY.Person[578]["轻功"] > 0 then
+				DrawString(x1 + size * 22, y1 + h * (i+2), JY.Wugong[JY.Person[578]["轻功"]]["名称"], M_Wheat, size)			
+			end
+    local nlmax = math.modf((JY.Person[id]["资质"] - 1) / 5) --5资质为一档，一档=250内
+	local attribmax = 9750 - nlmax * 100
+	
+	attribmax  = attribmax + (math.modf((101-JY.Person[id]["资质"])/20) * 300) --资质每少20点上限+300，1资+1500
+	
+	if ZLE(id) then --赵灵儿内力上限+3000
+		attribmax = attribmax + 3000
+	end
+	
+	if id == 0 and T7DFWM(0) then --东方未明每学一个内功内力上限+200
+		local tg = wgnumber(id, 5)
+		attribmax = attribmax + math.modf(tg * 200)
+	end
+	
+	if GX(id) and JX(id) then
+		attribmax = attribmax + 1000
+	end
+	
+	if DT(id, 631) then
+	--	local aa, bb = JX(id)
+	--	if aa then
+	local aa = JY.Person[578]["拳掌功夫"]--JX(pid)
+			attribmax = attribmax + aa * 50
+	--	end	
+	end
+		
+	if MPPD(id) == 2 and MPDJ(id) == 3 then
+		attribmax = attribmax + 750
+	end	
+	
+	if PersonKF(id, 85) then
+		attribmax = attribmax + 750		
+	end
+	
+	--[[if PersonKF(id, 88) then
+		attribmax = attribmax + 500		
+	end	]]
+	
+	if PersonKF(id, 108) then
+		attribmax = attribmax + 750		
+	end	
+
+    if id == 58 then
+      attribmax = attribmax - JY.Person[578]["半身像"] * 100	--武骧金星：修正杨过内力上限BUG
+    end
+	
+	if id == 0 and putong() > 7 and juexing() > 0 then
+		attribmax = attribmax + 1000		
+	end
+
+	attribmax = math.modf(attribmax * MPAttrib(id, 9))
+	
+	if T1LEQ(id) or hasTF(id, 93) then
+      attribmax = 10000
+    end		
+    if attribmax < 500 then
+      attribmax = 500
+    end
+	if not duiyou(id) then
+		attribmax = 10000
+	end	
+    if wglw(id,85) then
+	attribmax = math.min(attribmax, 12500)	
+	attribmax = attribmax + 2500
+	else
+	attribmax = math.min(attribmax, 10000)
+	end
+	DrawString(x1 + size * 12 - 20, y1 + h * i, "  "..tostring(attribmax), M_Wheat, size)		
+	
+	i = i + 1
+	local tmpi = i
+	local fgt = -1
+
+
+	
+	i = i + 3
+	DrawString(x1 + size * 8 - 18, y1 + h * i, "所会功夫", C_RED, size)
+	DrawString(x1 + size * 13 - 8, y1 + h * i, "等级", C_RED, size)
+	DrawString(x1 + size * 15 + 13, y1 + h * i, "威力", C_RED, size)
+	DrawString(x1 + size * 17 + 34, y1 + h * i, "连击", C_RED, size) --武骧金星：更多显示
+	DrawString(x1 + size * 19 + 55, y1 + h * i, "暴击", C_RED, size)		
+	--DrawString(x1 + size * 21 + 76, y1 + h * i, "封穴", C_RED, size)
+	--DrawString(x1 + size * 23 + 97, y1 + h * i, "流血", C_RED, size)	
+	--DrawString(x1 + size * 25 + 118, y1 + h * i, "迟缓", C_RED, size)	
+	--DrawString(x1 + size * 27 + 139, y1 + h * i, "带毒", C_RED, size)
+	DrawString(x1 + size * 21 + 76, y1 + h * i, "上限", C_RED, size) 	
+    local T = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "极"}
+    for j = wgoffset*12+1, wgoffset*12+12 do
+      i = i + 1
+	  if j > HHH_GAME_SETTING["WG_COUNT_MAX_LIMIT"] then
+		break
+	  end
+      local wugong = p["武功" .. j]
+	  if wugong == nil then
+		break
+	  end
+      if wugong > 0 then
+        local level = math.modf(p["武功等级" .. j] / 100) + 1
+        if p["武功等级" .. j] >= 999 then
+          level = 11
+        end
+		if p["声望"] == wugong then --功体显示
+			DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_GOLD, size)
+        elseif twogt(id) and p["外号"] == tostring(wugong) then
+			DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_GOLD, size)
+			fgt = wugong
+		else
+		    if XYL(id) then
+              	if p["武功" .. j] == GetS(112,3,0,0) then
+			       DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", "梯云步"), C_GOLD, size)
+				else
+				   DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_GOLD, size)
+				end
+			elseif T9ZY(id) then
+              	if p["武功" .. j] == GetS(112,1,0,0) then
+			       DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", "七探蛇盘枪"), C_GOLD, size)
+				else
+				   DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_GOLD, size)
+				end  
+			elseif T12YMZ(id) then
+              	if p["武功" .. j] == GetS(112,1,0,0) then
+			       DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", "梨花枪"), C_GOLD, size)
+				else
+				   DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_GOLD, size)
+				end  
+			else
+			DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_GOLD, size)
+			end
+        end
+		if p["武功等级" .. j] > 900 then
+			lib.SetClip(x1 + size * 8 - 18, y1 + h * 1, x1 + size * 10 + string.len(JY.Wugong[wugong]["名称"]) * size * (p["武功等级" .. j] - 900) / 200, y1 + h * (i) + h)
+			if p["声望"] == wugong then
+			    DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_ORANGE, size)
+			elseif twogt(id) and p["外号"] == tostring(wugong) then
+				DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_ORANGE, size)
+				fgt = wugong
+			else
+		    if XYL(id) then
+              	if p["武功" .. j] == GetS(112,3,0,0) then
+			       DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", "梯云步"), C_ORANGE, size)
+				else
+				   DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_ORANGE, size)
+				end
+			elseif T9ZY(id) then
+              	if p["武功" .. j] == GetS(112,1,0,0) then
+			       DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", "七探蛇盘枪"), C_ORANGE, size)
+				else
+				   DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_ORANGE, size)
+				end  
+			elseif T12YMZ(id) then
+              	if p["武功" .. j] == GetS(112,1,0,0) then
+			       DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", "梨花枪"), C_ORANGE, size)
+				else
+				   DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_ORANGE, size)
+				end  
+			else
+			DrawString(x1 + size * 8 - 18, y1 + h * (i), string.format("%s", JY.Wugong[wugong]["名称"]), C_ORANGE, size)
+			end
+			end
+			lib.SetClip(0, 0, 0, 0)
+        end
+        DrawString(x1 + size * 13 + 5, y1 + h * (i), T[level], C_WHITE, size)
+		DrawString(x1 + size * 15 + 16, y1 + h * (i), WGWL(id, wugong, level), C_WHITE, size)
+		for k, v in ipairs(CC.WGJC) do --武骧金星：更多显示
+			if v[1] == wugong then
+				local lianji = v[2]
+				local baoji = v[3]
+				DrawString(x1 + size * 17 + 37, y1 + h * i, v[2], C_WHITE, size)
+				DrawString(x1 + size * 19 + 58, y1 + h * i, v[3], C_WHITE, size)						
+				break
+			end
+		end		
+		--for k, v in ipairs(CC.WGJC2) do
+		--	if v[1] == wugong then
+		--		local fengxue = v[2]
+		--		local liuxue = v[3]
+		--		local chihuan = v[4]
+		--		DrawString(x1 + size * 21 + 79, y1 + h * i, v[2], C_WHITE, size)
+		--		DrawString(x1 + size * 23 + 100, y1 + h * i, v[3], C_WHITE, size)	
+		--		DrawString(x1 + size * 25 + 121, y1 + h * i, v[4], C_WHITE, size)					
+		--		break
+		--	end
+		--end
+		--DrawString(x1 + size * 27 + 142, y1 + h * (i), JY.Wugong[wugong]["敌人中毒点数"], C_WHITE, size)
+		local tmp3 = math.modf((100 - JY.Person[id]["资质"]) / 25) + 1
+		--tmp3 = math.min(2, 1 + tmp3 * 0.5)
+		tmp3 = 2
+		DrawString(x1 + size * 21 + 79, y1 + h * (i), math.modf(JY.Wugong[wugong]["攻击力" .. 10] * tmp3) + JY.Wugong[wugong]["上限"], C_WHITE, size)		 
+      end
+    end	
+	--if twogt(id) and fgt ~= -1 then
+	if twogt(id) and tonumber(JY.Person[id]["外号"])~= nil then
+		DrawString(x1 + size * 8 - 18, y1 + h * tmpi, "副功体:".."【"..JY.Wugong[tonumber(JY.Person[id]["外号"])]["名称"].."】", M_Wheat, size)
+	elseif twogt(id) then
+		DrawString(x1 + size * 8 - 18, y1 + h * tmpi, "副功体:".."【无】", M_Wheat, size)
+	else
+		DrawString(x1 + size * 8 - 18, y1 + h * tmpi, "副功体:".."【※】", M_Wheat, size)	
+	end	
+	local lw = "【※】"
+	if id == 0 and GetS(111,0,0,0) > 0 and GetS(111,0,0,0) <= 180 and GetS(111,0,0,0) ~= 47 then 
+	   DrawString(x1 + size * 8 - 18, y1 + h * (tmpi+1), "领悟:".."【"..string.format("%s", JY.Wugong[GetS(111,0,0,0)]["名称"]).."】", M_Wheat, size)	
+	elseif id == 0 and GetS(111,0,0,0) == 592 then 
+	   DrawString(x1 + size * 8 - 18, y1 + h * (tmpi+1), "领悟:".."【"..string.format("%s", JY.Wugong[47]["名称"]).."】", M_Wheat, size)	
+	elseif id == 0 and GetS(111,0,0,0) == 999 then 
+	   DrawString(x1 + size * 8 - 18, y1 + h * (tmpi+1), "领悟:".."【左右互搏】", M_Wheat, size)
+	elseif id == 0 and GetS(111,0,0,0) == 998 then 
+	   DrawString(x1 + size * 8 - 18, y1 + h * (tmpi+1), "领悟:".."【小无相】", M_Wheat, size)	   
+	else 
+	   DrawString(x1 + size * 8 - 18, y1 + h * (tmpi+1), "领悟:".."【※】", M_Wheat, size)	
+    end	
+	x1 = dx + 5 + size
+	y1 = dy + 5	
+	--DrawString(x1 + size * 5, y1 + h + h * 15 , "上下键浏览，左右键切换，ESC退出", C_ORANGE, size - 3)
+	--DrawString(dx + 170, CC.ScreenH - dy - 27 , "上下键浏览，左右键切换，ESC退出", C_ORANGE, size - 3) --武骧金星：微调位置
+end
+
 --战斗会跳出的问题
 GetAtkNum = function(x, y, movfw, atkfw, atk)
   local point = {}
@@ -58264,6 +58947,7 @@ War_StatusMenu()
 ]]
 
 
+
 function MapWatch()
 	local x = WAR.Person[WAR.CurID]["坐标X"];
   local y = WAR.Person[WAR.CurID]["坐标Y"];
@@ -58283,29 +58967,38 @@ function MapWatch()
 			break;
 		end
 	end
+	local wgoffset=0
 	while true do
 		Cls()
 		page = limitX(page, 1, 2)
 		--ShowPersonStatus_sub(list[r],page)
 		if page == 1 then
-			ShowPersonStatus_sub(id, page)
+			ShowPersonStatus_sub_new(id, page,wgoffset)
 		elseif page == 2 then
 			page = NLJS(id, page)
 			if page == -1 then
 				break
 			end
 			Cls()
-			ShowPersonStatus_sub(id, page)
+			ShowPersonStatus_sub_new(id, page,wgoffset)
 			ShowScreen()
 		else
-			ShowPersonStatus_sub(id, page)
+			ShowPersonStatus_sub_new(id, page,wgoffset)
 		end	
 		ShowScreen();
 		local keypress = WaitKey()
 		if keypress == VK_LEFT then
 	  	  page = page - 1;
+		  wgoffset=0
    		elseif keypress == VK_RIGHT then
 	  	  page = page + 1;
+		  wgoffset=0
+		elseif keypress ==VK_SPACE then
+			if wgoffset > 4 then
+				wgoffset=0
+			else
+				wgoffset=wgoffset+1
+			end
 		elseif keypress == 27 then
 	  		break
 		end
