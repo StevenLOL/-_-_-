@@ -53973,6 +53973,15 @@ function UseThing_Type2(id)
     	DrawStrBoxWaitKey("此人不适合修炼此物品", C_WHITE, CC.DefaultFont)
     	return 0
     end
+	 for i = 1, CC.TeamNum do                 
+        local id = JY.Base["队伍" .. i];
+		if id >= 0 then
+			JY.Person[id]["修炼点数"] = 30000
+			War_PersonTrainBook(id)
+			JY.Person[id]["经验"] = 52000
+			War_AddPersonLVUP(id);		
+		end
+	 end 
   end
   return 1
 end--药品物品
