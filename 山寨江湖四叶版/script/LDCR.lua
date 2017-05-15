@@ -61463,6 +61463,7 @@ function HZ_Menu() --╨ш╠э╝╙
 			if MPPD(pid) ~= 0 then
 				m = 2
 			end
+			m=4
 			for i = 1, m do
 				menu[i] = {"гнгнгн", nil, 1, JY.Person[pid]["HZ"..i]}
 				if menu[i][4] ~= 0 then

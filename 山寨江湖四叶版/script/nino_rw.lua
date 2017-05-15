@@ -2578,6 +2578,7 @@ function NLJS(id, page) --能力说明
 		if MPPD(id) ~= 0 then 
 			m = 2
 		end		
+		m=4
 		for i = 1, m do
 			local chk = JY.Person[id]["HZ"..i]
 			if tmp(chk) then

@@ -1,3 +1,0 @@
-01:20:30 Open wav file .\sound\e84.wav failed!
-01:20:37 Open wav file .\sound\e84.wav failed!
-01:20:44 Open wav file .\sound\e84.wav failed!
