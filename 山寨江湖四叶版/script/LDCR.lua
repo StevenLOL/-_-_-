@@ -29626,9 +29626,9 @@ end
   
   WarLoadMap(WAR.Data["地图"])	--加载战斗地图 
   --飞影：在这里设置一个战斗开始时询问是否自动战斗的语句，方便挂机党。
-  if DrawStrBoxYesNo(-1, -1, "是否自动战斗？", C_WHITE, 30) == true then 
+  --[[if DrawStrBoxYesNo(-1, -1, "是否自动战斗？", C_WHITE, 30) == true then 
 	WAR.AutoFight = 1
-  end
+  end]]
   --雪山落花流水战役
   if WAR.ZDDH == 42 then
     SetS(2, 24, 31, 1, 0)
