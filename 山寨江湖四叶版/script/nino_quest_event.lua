@@ -1328,7 +1328,10 @@ function biwu_sub()
 		CC.MatchTurn = CC.MatchTurn + 1
 	end
 	say("本届华山论剑最终胜利者，武功天下第一："..JY.Person[one]["姓名"].."！", 585)
-	--if inteam(one) then AddPersonAttrib(one, "实战", 500) end
+	if inteam(one) then 
+	AddPersonAttrib(one, "武学常识", 50) 
+	instruct_32(174,5000);   --  2(2):得到物品[银两][200]
+	end
 	if inteam(one) and jiangli == 1 and (not hasHZ(90)) then addHZ(90) end
 	for i = 1, #list do
 		JY.Person[list[i][1]][CC.EVB29] = store[list[i][1]][1]

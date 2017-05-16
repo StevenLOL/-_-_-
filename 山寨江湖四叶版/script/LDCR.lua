@@ -23817,16 +23817,16 @@ function War_PersonTrainBook(pid)
   JY.Thing[123]["加拳掌功夫"] = 1
   local wugongid = JY.Thing[thingid]["练出武功"]
   local wg = 0
-  if JY.Person[pid]["武功12"] > 0 and wugongid >= 0 then
+  --if JY.Person[pid]["武功12"] > 0 and wugongid >= 0 then
     for i = 1, HHH_GAME_SETTING["WG_COUNT_MAX"] do
       if JY.Thing[thingid]["练出武功"] == JY.Person[pid]["武功" .. i] then
         wg = 1
       end
     end
-  if wg == 0 then		--修复第一版本，不可修炼武功的BUG
-  	return 
-	end
-  end
+ -- if wg == 0 then		--修复第一版本，不可修炼武功的BUG
+  --	return 
+--	end
+ -- end
   --[[
 	if JY.Person[pid]["武功" .. HHH_GAME_SETTING["WG_COUNT_MAX"] ] ~= nil and JY.Person[pid]["武功" .. HHH_GAME_SETTING["WG_COUNT_MAX"] ] > 0 
 		and JY.Person[pid]["武功等级" .. HHH_GAME_SETTING["WG_COUNT_MAX"] ] ~= nil and JY.Person[pid]["武功等级" .. HHH_GAME_SETTING["WG_COUNT_MAX"] ] >= 0 

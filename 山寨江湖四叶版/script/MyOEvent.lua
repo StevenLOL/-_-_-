@@ -1125,7 +1125,11 @@ OEVENTLUA[4100] = function()
 			
 			instruct_2(210,100+math.random(100));   --  2(2):得到物品[食材][10]
 			instruct_2(209,100+math.random(100)); 
-			return;
+			--for ii = 41, 141 do
+			--instruct_2(math.random(100)+41,1); 
+			--instruct_2(ii,1); 
+			--end
+			return
 		end
 	
 	--胡斐居(代码0）：食材10，好逑汤1，小还丹10，白云熊胆丸10
