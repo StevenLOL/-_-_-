@@ -33222,6 +33222,8 @@ function AddPersonAttrib(id, str, value)
 end
 --显示物品菜单
 function SelectThing(thing,thingnum, bg)    
+--steven
+
 	local xnum=9--小方框个数
 	local ynum=4
 	
@@ -33247,9 +33249,9 @@ function SelectThing(thing,thingnum, bg)
 		lib.PicLoadFile(CC.ThingPicFile[1], CC.ThingPicFile[2], 93)
 		lib.PicLoadCache(93, 2, 500, 300)
 		--  lib.LoadPicture(CONFIG.PicturePath .. "bj-2.png", 0, 0)
-		if bg ~= nil then
-			lib.LoadPicture(bg, -1, -1)
-		end
+		--if bg ~= nil then
+		--	lib.LoadPicture(bg, -1, -1)
+		--end
 		
 		y1_1=dy;
 		y1_2=y1_1+CC.ThingFontSize+2*CC.MenuBorderPixel;
@@ -33461,7 +33463,18 @@ function SelectThing(thing,thingnum, bg)
 			cur_thing=-1;
 			break;
 		elseif keypress==VK_RETURN or keypress==VK_SPACE then
-			break;
+			if bg == nil then
+				Cls();
+				if cur_thing ~=-1 then
+					UseThing(cur_thing)
+				cur_thing=-1
+				end
+			else
+				break;
+			end
+			
+			
+			--break;
 		elseif keypress==VK_UP then
 			if  cur_y == 0 then
 				if  cur_line > 0 then
@@ -48756,6 +48769,7 @@ function Menu_System()
   end
 end--物品菜单
 function Menu_Thing(flag)
+ --steven 
   local menu = {
 {"全部物品", nil, 1}, 
 {"剧情物品", nil, 1}, 
@@ -53772,6 +53786,8 @@ function chkthingattrib(id)
 end
 
 function UseThing_Type1(id)
+ --steven
+ 
   DrawStrBox(CC.MainSubMenuX, CC.MainSubMenuY, string.format("谁要配备%s?", JY.Thing[id]["名称"]), C_WHITE, CC.DefaultFont)
   local nexty = CC.MainSubMenuY + CC.SingleLineHeight
   local r = SelectTeamMenu(CC.MainSubMenuX, nexty, id) --武骧金星：不适用的人物不显示
@@ -55675,7 +55691,7 @@ function War_ThingMenu()
       num = num + 1
     end
   end
-  local r = SelectThing(thing, thingnum)
+  local r = SelectThing(thing, thingnum,1)
   Cls()
   local rr = 0
   if r >= 0 and UseThing(r) == 1 then
@@ -57400,6 +57416,7 @@ function Menu_PersonExit()
   return 0
 end--物品菜单
 function Menu_Thing()
+--steven
   local menu = {
 {"全部物品", nil, 1}, 
 {"剧情物品", nil, 1}, 
