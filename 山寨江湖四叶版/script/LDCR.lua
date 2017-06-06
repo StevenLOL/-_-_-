@@ -48889,6 +48889,8 @@ end
 
 --物品使用菜单
 function MenuDSJ()
+--steven
+--卖出物品
   local menu = {
 {"全部物品", nil, 0}, 
 {"剧情物品", nil, 0}, 
@@ -48926,7 +48928,7 @@ function MenuDSJ()
       end
     end
   
-    local r = SelectThing(thing, thingnum)
+    local r = SelectThing(thing, thingnum，1)
     if r >= 0 then
       return r
     end
