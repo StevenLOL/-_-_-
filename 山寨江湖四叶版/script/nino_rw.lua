@@ -4404,7 +4404,7 @@ function feedPet()
 		end 
 	end
 	 --1 有返回
-	local r = SelectThing(thing, thingnum，1) --1 有返回
+	local r = SelectThing(thing, thingnum,1) --1 有返回
 	if r >= 0 then
 		local pid = 606
 		local jl = 15
@@ -4463,7 +4463,7 @@ function readPet()
 			end
 		end 
 	end
-	local r = SelectThing(thing, thingnum，1)
+	local r = SelectThing(thing, thingnum,1)
 	if r >= 0 then
 		local pid = 606
 		local jl = JY.Person[pid]["资质"]

@@ -48928,7 +48928,7 @@ function MenuDSJ()
       end
     end
   
-    local r = SelectThing(thing, thingnum£¬1)
+    local r = SelectThing(thing, thingnum,1)
     if r >= 0 then
       return r
     end
