@@ -6318,14 +6318,14 @@ OEVENTLUA[630] = function()
 				say("咦这是？？？",0) 
 			    SetS(106, 63, 1, 0, 0)
                 SetS(106, 63, 2, 0, 117)
-				if WarMain(288) == false then
-				say("真是可惜",0) 
-				else
+				--if WarMain(288) == false then
+				--say("真是可惜",0) 
+				--else
 				say("原来如此",0) 
 	            QZXS("领悟八荒六合！")
 	            instruct_0();
 	            SetS(111, 0, 0, 0,101)
-				end
+				--end
                 end
 	instruct_3(-2,-2,0,0,0,0,0,0,0,0,0,0,0);
 	if cxzj() == 49 then

@@ -14433,7 +14433,8 @@ function DIY_War_FightMenu(aa,bb,k)
 		return r
 	else
 	    local r = nil
-		r = ShowMenu(menu, numwugong, 0, CC.MainSubMenuX, CC.MainSubMenuY, 0, 0, 1, 1, CC.DefaultFont, C_ORANGE, C_WHITE)
+		--steven
+		r = ShowMenu(menu, numwugong, 15, CC.MainSubMenuX, CC.MainSubMenuY, 0, 0, 1, 1, CC.DefaultFont, C_ORANGE, C_WHITE)
 		if r == 0 then
 			return 0
 		end
@@ -22258,8 +22259,8 @@ else
 	
     --武功增加经验和升级
     --if inteam(pid) or GetS(103, 0, 0, 1) == pid then --nino：伪主角武功可以升级
-	if JY.Person[pid]["武功等级" .. wugongnum] < 900 then
-		--JY.Person[pid]["武功等级" .. wugongnum] = JY.Person[pid]["武功等级" .. wugongnum] + 5 + Rnd(10) 武骧金星：武功不能通过空挥到LV10
+	if JY.Person[pid]["武功等级" .. wugongnum] < 900 and inteam(pid) then
+		JY.Person[pid]["武功等级" .. wugongnum] = JY.Person[pid]["武功等级" .. wugongnum] + 5 + Rnd(10) --武骧金星：武功不能通过空挥到LV10
 	   elseif JY.Person[pid]["武功等级" .. wugongnum] < 999 then
 	   	if inteam(pid) or GetS(103, 0, 0, 1) == pid then JY.Person[pid]["武功等级" .. wugongnum] = JY.Person[pid]["武功等级" .. wugongnum] + 100 end
 		if 999 <= JY.Person[pid]["武功等级" .. wugongnum] then
@@ -37545,6 +37546,12 @@ function DrawStrBoxYesNo(x, y, str, color, size)
 end--显示阴影字符串
 function DrawString(x, y, str, color, size)
   lib.DrawStr(x, y, str, color, size, CC.FontName, CC.SrcCharSet, CC.OSCharSet)
+end
+
+function DrawStrings(x, y, str, color, size)
+  for s in str do
+  lib.DrawStr(x, y, s, color, size, CC.FontName, CC.SrcCharSet, CC.OSCharSet)
+  end
 end
 
 --显示阴影字符串
@@ -53880,11 +53887,12 @@ function DIY_yiwang(pid,wg)
 end
 --秘籍物品使用
 function UseThing_Type2(id)
-  if JY.Thing[id]["使用人"] >= 0 and DrawStrBoxYesNo(-1, -1, CC.EVB140, C_WHITE, CC.DefaultFont) == false then
+  --[[if JY.Thing[id]["使用人"] >= 0 and DrawStrBoxYesNo(-1, -1, CC.EVB140, C_WHITE, CC.DefaultFont) == false then
     Cls(CC.MainSubMenuX, CC.MainSubMenuY, CC.ScreenW, CC.ScreenH)
     ShowScreen()
     return 0
   end
+  ]]
   Cls()
   DrawStrBox(CC.MainSubMenuX, CC.MainSubMenuY, string.format(CC.EVB141, JY.Thing[id]["名称"]), C_WHITE, CC.DefaultFont)
   local nexty = CC.MainSubMenuY + CC.SingleLineHeight
@@ -56585,6 +56593,9 @@ function War_ShowFight(pid, wugong, wugongtype, level, x, y, eft, ZHEN_ID)
   local HitXY = {}
   local HitXYNum = 0
   local hnum = 13;		--HitXY的长度个数
+  
+  --steven
+  
   for i = 0, WAR.PersonNum - 1 do
     local x1 = WAR.Person[i]["坐标X"]
     local y1 = WAR.Person[i]["坐标Y"]
@@ -56730,12 +56741,13 @@ function War_ShowFight(pid, wugong, wugongtype, level, x, y, eft, ZHEN_ID)
     end
     
     --偷东西，斗转 - -
-    if WAR.TD > -1 then
-      if WAR.TD == 118 then
-        say("哈哈哈－－－，想偷我的斗转星移？没门儿！要想得斗转下次就乖乖跟我合作吧！", 51)
-      else
+    --steven
+	if WAR.TD > -1 then
+      --if WAR.TD == 118 then
+      --  say("哈哈哈－－－，想偷我的斗转星移？没门儿！要想得斗转下次就乖乖跟我合作吧！", 51)
+      --else
         instruct_2(WAR.TD, 1)
-      end
+      --end
       WAR.TD = -1
     end
   end
@@ -56881,11 +56893,18 @@ function War_ShowFight(pid, wugong, wugongtype, level, x, y, eft, ZHEN_ID)
     
     local area = (clip.x2 - clip.x1) * (clip.y2 - clip.y1)		--绘画的范围
     local surid = lib.SaveSur(minx, miny, maxx, maxy)		--绘画句柄
+	local flag = false;
+		
     
+
+  
     --显示点数
+	--steven
+	--
     for y = 3, hnum do
     	local flag = false;
-      for i = 5, 15 do
+      --for i = 5, 15 do
+	  for i = 5, 10 do
         local tstart = lib.GetTime()
         local y_off = i * 2 + 65
         
@@ -56946,7 +56965,8 @@ function War_ShowFight(pid, wugong, wugongtype, level, x, y, eft, ZHEN_ID)
 	      end
       end
     end
-    lib.FreeSur(surid)
+    
+	lib.FreeSur(surid)
   end
   
 
@@ -61489,6 +61509,7 @@ function HZ_Menu() --需添加
 			if MPPD(pid) ~= 0 then
 				m = 2
 			end
+			--steven
 			m=4
 			for i = 1, m do
 				menu[i] = {"－－－", nil, 1, JY.Person[pid]["HZ"..i]}
@@ -61551,6 +61572,11 @@ function setHZ(id, hz, num)
 end	
 
 function getHZ(id, hz)
+	for i = 1, 4 do
+		if JY.Person[id]["HZ"..i] == hz then
+			return true
+		end
+	end
 	return false
 end
 

@@ -396,6 +396,12 @@ OEVENTLUA[30014] = function() --擂台
 end
 
 OEVENTLUA[30050] = function() --奇遇总汇
+	local yes = 0
+	if math.random(100) > 98 then
+		yes = 1
+		else do return end
+		
+	end
 	local pd = math.modf((101 - JY.Person[zj()]["资质"]) * 0.1)
 	if putong() == 11 then
 		pd = pd + 3
@@ -403,12 +409,10 @@ OEVENTLUA[30050] = function() --奇遇总汇
 	if GetS(106, 63, 0, 0) >= math.modf(pd + 5 + 5 * tianshu()) then
 		do return end
 	end
-	local yes = 0
-	if math.random(200) == 100 then
-		yes = 1
-	end
+	
+	
 	if yes == 0 then
-		do return end
+		
 	end
 	if yes == 1 then
 		local bonus = tianshu()
@@ -489,14 +493,14 @@ OEVENTLUA[30052] = function(aa, bb) --捡武功
 	local thing = randomwugong2(aa, bb)
 	local count = 0
 	while true do
-		if hasthing(thing) == false or count >= 25 then
+		if hasthing(thing) == false or count >= 100 then
 			break
 		end
 		count = count + 1
 		thing = randomwugong2(aa, bb)
 	end
 	addthing(thing, 1)		
-	if count >=25 then
+	if count >=100 then
 		say("原来是已经看过的旧书。")
 	else
 		say("哈哈！赚到了赚到了！")
@@ -548,7 +552,7 @@ OEVENTLUA[30053] = function() --挑战
 end
 
 OEVENTLUA[30054] = function() --捡药
-	local money = math.random(5) * 1000
+	local money = math.random(5) * 100
 	local head = math.random(350, 575)
 	Cls()
 	say("这位少侠，我这里有秘制的灵丹，可以助你增进修为。现在只要"..money.."两银子。不知道你有没有兴趣？", head, 0, "商人")
@@ -606,7 +610,7 @@ end
 ]]
 
 OEVENTLUA[30055] = function() --遇大侠
-	local money = math.random(3) * 1000
+	local money = math.random(3) * 100
 	local head = math.random(350, 575)
 	Cls()
 	say("本大侠的补习班，只需要"..money.."两银子，有兴趣吗？", head, 0, "大侠")
@@ -662,7 +666,7 @@ OEVENTLUA[30055] = function() --遇大侠
 end
 
 OEVENTLUA[30056] = function() --遇铁匠
-	local money = math.random(5) * 1000
+	local money = math.random(5) * 100
 	local head = math.random(350, 575)
 	Cls()
 	say("这位少侠，我可以帮你锻炼身上的神兵利器，只需要"..money.."两银子，你有兴趣吗？", head, 0, "铁匠")
@@ -695,7 +699,7 @@ OEVENTLUA[30056] = function() --遇铁匠
       end 
     end
     local r = 0
-	r = SelectThing(thing, thingnum)	
+	r = SelectThing(thing, thingnum，1)	
 	if r < 1 then
 		Cls()
 		say("不要就算了！", head, 0, "铁匠")

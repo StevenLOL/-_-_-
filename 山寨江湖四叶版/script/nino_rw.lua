@@ -1156,9 +1156,11 @@ function newgame()
 		  JY.Person[0]["内力性质"] = 2
 		end	
 		say("在踏上江湖路之前，给你一个学习的机会吧，请善用你的技能点数。", 585)
-		tb("你现在最多可以学习"..4 + JY.Thing[203][WZ6].."个技能")
-
+		--tb("你现在最多可以学习"..4 + JY.Thing[203][WZ6].."个技能")
+		--steven
+		tb("你现在最多可以学习"..24 + JY.Thing[203][WZ6].."个技能")
 		learnSK()
+		
 		say("其实你还可以创建自己的战意技，请善用你的技能点数。", 585)
 		tb("你现在最多可以领悟".."3".."个战意组件")
 		learnDZ()
@@ -1195,7 +1197,11 @@ function newgame()
 
 			else
 				say("可惜答错了，不过没关系，下次再努力吧。", 585)
+				
+				
 			end
+			--steven
+			
 		end		   
 		JY.Person[0]["生命最大值"] = 50
 		JY.Person[0]["内力最大值"] = 100
@@ -1211,7 +1217,10 @@ function newgame()
 		JY.Person[0]["耍刀技巧"] = 40
 		JY.Person[0]["特殊兵器"] = 40
 		JY.Person[0]["暗器技巧"] = 40
+		
 		zjtype(4)
+		tfkf_DIY()
+		
 	elseif mode == 2 then
 		local r = -1
 		local plist = cxlist()
@@ -1699,6 +1708,8 @@ function tfkf()
 		end
 		local r = ShowMenu(menu,#menu,15,x1,y1+CC.SingleLineHeight,0,0,1,1,CC.DefaultFont,C_ORANGE,C_WHITE);	
 		SetS(112,1,0,0,list[r])
+		--steven
+		JY.Person[0]["武功" .. 1]=list[r]
 		end
 		if GetS(112,2,0,0) < 1 then 
         DrawStrBoxWaitKey("请选择天赋内功", C_WHITE, 30)
@@ -1712,6 +1723,8 @@ function tfkf()
 		end
 		local r = ShowMenu(menu,#menu,15,x1,y1+CC.SingleLineHeight,0,0,1,1,CC.DefaultFont,C_ORANGE,C_WHITE);	
 		SetS(112,2,0,0,list[r])
+		--steven
+		JY.Person[0]["武功" .. 2]=list[r]
 		end 
 		if GetS(112,3,0,0) < 1 then 
         DrawStrBoxWaitKey("请选择天赋轻功", C_WHITE, 30)
@@ -1725,9 +1738,63 @@ function tfkf()
 		end
 		local r = ShowMenu(menu,#menu,15,x1,y1+CC.SingleLineHeight,0,0,1,1,CC.DefaultFont,C_ORANGE,C_WHITE);	
 		SetS(112,3,0,0,list[r])
+		--steven
+		JY.Person[0]["武功" .. 3]=list[r]
 		end
 end
+function tfkf_DIY()
+        DrawStrBoxWaitKey("请选择天赋轻功", C_WHITE, 30)
+		local list = {}
+		local x1 = CC.MainSubMenuX
+		local y1 = CC.MainSubMenuY		
+		list = {115,116,117,118,119,143,179}
+		local menu = {}
+		for i = 1, #list do
+			menu[i] = {JY.Wugong[list[i]]["名称"], nil, 1}
+		end
+		local r = ShowMenu(menu,#menu,15,x1,y1+CC.SingleLineHeight,0,0,1,1,CC.DefaultFont,C_ORANGE,C_WHITE);	
+		SetS(112,3,0,0,list[r])
+		--steven
+		JY.Person[0]["武功" .. 1]=list[r]
+        DrawStrBoxWaitKey("请选择天赋武功", C_WHITE, 30)
+		local list = {}
+		local x1 = CC.MainSubMenuX
+		local y1 = CC.MainSubMenuY		
+		list = {1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,
+                27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,
+				50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,
+				68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,86,
+				109,110,111,112,114,120,123,125,126,127,128,129,130,132,133,134,
+				135,136,137,138,139,140,141,142,144,145,146,147,148,149,154,155,156,
+				157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177}
+		local menu = {}
+		for i = 1, #list do
+			menu[i] = {JY.Wugong[list[i]]["名称"], nil, 1}
+		end
+		local r = ShowMenu(menu,#menu,15,x1,y1+CC.SingleLineHeight,0,0,1,1,CC.DefaultFont,C_ORANGE,C_WHITE);	
+		SetS(112,1,0,0,list[r])
+		--steven
+		JY.Person[0]["武功" .. 2]=list[r]
 
+	 
+        DrawStrBoxWaitKey("请选择天赋内功", C_WHITE, 30)
+		local list = {}
+		local x1 = CC.MainSubMenuX
+		local y1 = CC.MainSubMenuY		
+		list = {6,85,88,87,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,121,124,150,151,152,153,178,180}
+		local menu = {}
+		for i = 1, #list do
+			menu[i] = {JY.Wugong[list[i]]["名称"], nil, 1}
+		end
+		local r = ShowMenu(menu,#menu,15,x1,y1+CC.SingleLineHeight,0,0,1,1,CC.DefaultFont,C_ORANGE,C_WHITE);	
+		SetS(112,2,0,0,list[r])
+		--steven
+		JY.Person[0]["武功" .. 3]=list[r]
+	
+
+        
+
+end
 function mmtfkf()
         DrawStrBoxWaitKey("请选择天赋武功", C_WHITE, 30)
 --		JY.Person[578]["攻击力"] = 0
@@ -2933,7 +3000,9 @@ end
 
 function learnSK()
 	local num = 0
-	local nummax = 4 + JY.Thing[203][WZ6]
+	--local nummax = 4 + JY.Thing[203][WZ6]
+	--steven
+	local nummax = 24 + JY.Thing[203][WZ6]
 	local m = {
 		{"学习技能", nil, 1},
 		{"开始旅程", nil, 1},
@@ -2967,7 +3036,8 @@ function learnSK()
 			if CC.SKpoint < CC.SK[s][3] then
 				tb("技能点数不足！")
 			else
-				CC.SKpoint = CC.SKpoint - CC.SK[s][3]
+				--steven
+				CC.SKpoint = 30000 -- CC.SKpoint - CC.SK[s][3]
 				menu[s][0] = 0
 				setSK(s, 1)
 				num = num + 1
@@ -4333,7 +4403,8 @@ function feedPet()
 			end
 		end 
 	end
-	local r = SelectThing(thing, thingnum)
+	 --1 有返回
+	local r = SelectThing(thing, thingnum，1) --1 有返回
 	if r >= 0 then
 		local pid = 606
 		local jl = 15
@@ -4392,7 +4463,7 @@ function readPet()
 			end
 		end 
 	end
-	local r = SelectThing(thing, thingnum)
+	local r = SelectThing(thing, thingnum，1)
 	if r >= 0 then
 		local pid = 606
 		local jl = JY.Person[pid]["资质"]
