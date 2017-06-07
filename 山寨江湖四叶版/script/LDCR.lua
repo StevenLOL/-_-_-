@@ -33223,11 +33223,11 @@ function AddPersonAttrib(id, str, value)
 end
 --显示物品菜单
 function SelectThing(thing,thingnum, bg)    
---steven
+
 
 	local xnum=9--小方框个数
 	local ynum=4
-	
+	--steven
 	--local w=CC.ThingPicWidth*xnum+(xnum-1)*CC.ThingGapIn+2*CC.ThingGapOut;  --总体宽度
 	--local h=CC.ThingPicHeight*ynum+(ynum-1)*CC.ThingGapIn+2*CC.ThingGapOut; --物品栏高度
     local w=CC.ScreenW
@@ -48889,8 +48889,7 @@ end
 
 --物品使用菜单
 function MenuDSJ()
---steven
---卖出物品
+
   local menu = {
 {"全部物品", nil, 0}, 
 {"剧情物品", nil, 0}, 
@@ -48928,7 +48927,8 @@ function MenuDSJ()
       end
     end
   
-    local r = SelectThing(thing, thingnum,1)
+    
+	local r = SelectThing(thing, thingnum, 1)
     if r >= 0 then
       return r
     end
@@ -55701,7 +55701,7 @@ function War_ThingMenu()
       num = num + 1
     end
   end
-  local r = SelectThing(thing, thingnum,1)
+  local r = SelectThing(thing, thingnum, 1)
   Cls()
   local rr = 0
   if r >= 0 and UseThing(r) == 1 then

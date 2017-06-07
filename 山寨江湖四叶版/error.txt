@@ -1,2 +1,0 @@
-07:36:12 load lua file .\script\LDCR.lua error: syntax error!
-

@@ -699,7 +699,7 @@ OEVENTLUA[30056] = function() --遇铁匠
       end 
     end
     local r = 0
-	r = SelectThing(thing, thingnum，1)	
+	r = SelectThing(thing, thingnum, 1)	
 	if r < 1 then
 		Cls()
 		say("不要就算了！", head, 0, "铁匠")
