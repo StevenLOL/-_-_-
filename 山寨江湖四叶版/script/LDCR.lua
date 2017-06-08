@@ -2211,8 +2211,13 @@ function War_WugongHurtLife(emenyid, wugong, level, ang)
     end
   --end
   
-  if MPPD(eid) == 3 and JLSD(10, 60, eid) and DWPD() then --玉蜂针
-	WAR.YFZ[eid] = {pid, WAR.Person[WAR.CurID]["坐标X"], WAR.Person[WAR.CurID]["坐标Y"]}
+  --if MPPD(eid) == 3 and JLSD(10, 60, eid) and DWPD() then --玉蜂针
+  --steven
+  if MPPD(eid) == 3 then --玉蜂针
+   --local s = math.random(100)
+   --if s>10 then
+		WAR.YFZ[eid] = {pid, WAR.Person[WAR.CurID]["坐标X"], WAR.Person[WAR.CurID]["坐标Y"]}
+   --end	
   end
   
   if T13TQS(eid)  and WAR.TQS2==3 then --沼跃鱼：白虎斗气反击
@@ -22266,7 +22271,9 @@ else
 		if 999 <= JY.Person[pid]["武功等级" .. wugongnum] then
 			JY.Person[pid]["武功等级" .. wugongnum] = 999
 			PlayWavAtk(42)
-			DrawStrBoxWaitKey(string.format(CC.WARS76, JY.Person[pid]["姓名"], JY.Wugong[JY.Person[pid]["武功" .. wugongnum]]["名称"]), C_ORANGE, CC.DefaultFont)
+			--DrawStrBoxWaitKey(string.format(CC.WARS76, JY.Person[pid]["姓名"], JY.Wugong[JY.Person[pid]["武功" .. wugongnum]]["名称"]), C_ORANGE, CC.DefaultFont)
+			--steven save time 
+			DrawStrBox(-1,-1,string.format(CC.WARS76, JY.Person[pid]["姓名"], JY.Wugong[JY.Person[pid]["武功" .. wugongnum]]["名称"]), C_ORANGE, CC.DefaultFont)
 			ShowScreen()
 			lib.Delay(200)
 			Cls()

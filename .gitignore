@@ -1,4 +1,4 @@
 head.grp filter=lfs diff=lfs merge=lfs -text
 *.grp filter=lfs diff=lfs merge=lfs -text
 山寨江湖四叶版/.idea
-山寨江湖四叶版/data/SAVE/
+山寨江湖四叶版\data\SAVE\

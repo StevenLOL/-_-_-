@@ -1,0 +1,9 @@
+23:03:48 Open wav file .\sound\e133.wav failed!
+23:03:54 Open wav file .\sound\e133.wav failed!
+23:13:57 Open wav file .\sound\e139.wav failed!
+23:15:04 Open wav file .\sound\e118.wav failed!
+23:16:54 Open wav file .\sound\e116.wav failed!
+23:16:58 Open wav file .\sound\e116.wav failed!
+23:17:13 Open wav file .\sound\e116.wav failed!
+23:17:17 Open wav file .\sound\e116.wav failed!
+23:17:34 Open music file .\sound\game01.MP3 failed!
