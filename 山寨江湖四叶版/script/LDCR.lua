@@ -1065,48 +1065,57 @@ function DIYPD(pp, jl)
 end
 
 function PersonGTJL(p, kf, jl) --判断加力内功是否为主功体
+--steven
+	--[[
 	if JY.Person[p]["声望"] == kf and kf == jl then
 		return  true
 	end
-	if DT(p, 618) then --武骧金星：逍遥子特殊判定
+	]]
+	--if DT(p, 618) then --武骧金星：逍遥子特殊判定
 		for i = 1, HHH_GAME_SETTING["WG_COUNT_MAX"] do
 			if JY.Person[p]["武功" .. i] == kf then
 			return true
 			end
 		end	
-	end	
+	--end	
     --北冥吸功体
-	if p == 0 and (JY.Person[p]["声望"] == kf or WAR.BMGT == kf) then 
+	--[[if p == 0 and (JY.Person[p]["声望"] == kf or WAR.BMGT == kf) then 
 	   return true
 	end
 	if JY.Person[p]["声望"] == 9999 and (JY.Thing[224]["加攻击力"] == kf or JY.Thing[224]["加防御力"] ==kf) then 
 	   return true
 	end
+	]]
 	return false
 end
 
 function PersonGTHT(p, kf, ht) --判断护体内功是否为主功体
+--steven
+	--[[
 	if JY.Person[p]["声望"] == kf and kf == ht then
 		return  true
 	end
-	if DT(p, 618) then --武骧金星：逍遥子特殊判定
+	]]
+	--if DT(p, 618) then --武骧金星：逍遥子特殊判定
 		for i = 1, HHH_GAME_SETTING["WG_COUNT_MAX"] do
 			if JY.Person[p]["武功" .. i] == kf then
 			return true
 			end
 		end	
-	end
+	--end
 	--北冥吸功体
-	if p == 0 and (JY.Person[p]["声望"] == kf or WAR.BMGT == kf) then 
+	--[[if p == 0 and (JY.Person[p]["声望"] == kf or WAR.BMGT == kf) then 
 	   return true
 	end
 	if JY.Person[p]["声望"] == 9999 and (JY.Thing[224]["加攻击力"] == kf or JY.Thing[224]["加防御力"] ==kf) then 
 	   return true
-	end
+	end]]
 	return false
 end
 
 function PersonGT(p, kf) --判断主功体
+--steven
+--[[
     if WAR.PJTX == 1 and not DT(p,592) then --破尽天下
 	   return false
 	end
@@ -1123,19 +1132,22 @@ function PersonGT(p, kf) --判断主功体
 	if twogt(p) and JY.Person[p]["外号"] == kf then
 		return true
 	end
-	if DT(p, 618) then --武骧金星：逍遥子特殊判定
+	]]
+	--if DT(p, 618) then --武骧金星：逍遥子特殊判定
 		for i = 1, HHH_GAME_SETTING["WG_COUNT_MAX"] do
 			if JY.Person[p]["武功" .. i] == kf then
 			return true
 			end
 		end	
-	end--北冥吸功体
+	--end--北冥吸功体
+	--[[
 	if p == 0 and (JY.Person[p]["声望"] == kf or WAR.BMGT == kf) then 
 	   return true
 	end
 	if (JY.Person[p]["声望"] == 9999 or JY.Person[p]["外号"] == 9999 ) and (JY.Thing[224]["加攻击力"] == kf or JY.Thing[224]["加防御力"] ==kf) then 
 	   return true
 	end
+	]]
 	return false
 end
 --天赋内功12.26   ((v[1] == pid) or (v[1] == cxzj() and pid == 0))
@@ -2213,10 +2225,10 @@ function War_WugongHurtLife(emenyid, wugong, level, ang)
   
   --if MPPD(eid) == 3 and JLSD(10, 60, eid) and DWPD() then --玉蜂针
   --steven
-  if MPPD(eid) == 3 then --玉蜂针
+  if MPPD(eid) == 3 and DWPD() then --玉蜂针
    --local s = math.random(100)
    --if s>10 then
-		WAR.YFZ[eid] = {pid, WAR.Person[WAR.CurID]["坐标X"], WAR.Person[WAR.CurID]["坐标Y"]}
+		WAR.YFZ[eid] ={next=WAR.YFZ[eid],value= {pid, WAR.Person[WAR.CurID]["坐标X"], WAR.Person[WAR.CurID]["坐标Y"]}}
    --end	
   end
   
@@ -22757,19 +22769,21 @@ if WAR.L_HQJK == 1 then
       
   for i = 0, WAR.PersonNum - 1 do
     local tmppid = WAR.Person[i]["人物编号"]
-	if WAR.YFZ[tmppid] ~= nil then
+	while WAR.YFZ[tmppid]~= nil do
 		if JY.Person[tmppid]["生命"] > 0 then
 			local tmp = WAR.CurID
 			lib.Delay(50)
 			WAR.CurID = i		
 			DIYdisplay("玉蜂针·反击")
 			lib.Delay(100)
-			War_ExecuteMenu_Sub(WAR.YFZ[tmppid][2], WAR.YFZ[tmppid][3], 4, 33)
-			WAR.YFZ[tmppid] = nil
+			War_ExecuteMenu_Sub(WAR.YFZ[tmppid].value[2], WAR.YFZ[tmppid].value[3], 4, 33)
+			--WAR.YFZ[tmppid] = nil
 			WAR.CurID = tmp
+			WAR.YFZ[tmppid]=WAR.YFZ[tmppid].next
 		else
 			WAR.YFZ[tmppid] = nil
 		end
+		
     end
     
 	if WAR.BHFJ[tmppid] ~= nil then--沼跃鱼：白虎斗气反击
@@ -40176,26 +40190,34 @@ function instruct_64() --商店
   local menu = {}
   for i = 1, 5 do
     menu[i] = {}
-    local thingid = JY.Shop[id]["物品" .. i]
-    menu[i][1] = string.format("%-12s %5d", JY.Thing[thingid]["名称"], limitX(math.modf(JY.Thing[thingid]["价钱"] * 1.5), 0, 32000))
+	--steven
+    local thingid = math.random(100)+41  -- JY.Shop[id]["物品" .. i]
+    menu[i][1] = string.format("%-12s %5d", JY.Thing[thingid]["名称"], limitX(math.modf(JY.Thing[thingid]["价钱"] * 1), 0, 32000))
     menu[i][2] = nil
-    if JY.Shop[id]["物品数量" .. i] > 0 then
+	menu[i][3] = 1
+	menu[i][4] = thingid
+	menu[i][5] =limitX(math.modf(JY.Thing[thingid]["价钱"] * 1), 0, 32000)
+    --[[
+	if JY.Shop[id]["物品数量" .. i] > 0 then
       menu[i][3] = 1
     else
       menu[i][3] = 0
     end
+	]]
   end
   for i = 1, 200 do
     if JY.Base["物品" .. i] > 143 and JY.Base["物品" .. i] < 158 then
       ts = ts + 1
     end
   end
+  --[[
   if ts < 5 and id == 0 then --混元改成5本书
     menu[5][3] = 0
   end
   if ts < 7 and id == 4 then --狮子吼改成7本书
     menu[5][3] = 0
   end
+  ]]
   local x1 = (CC.ScreenW - 9 * CC.DefaultFont - 2 * CC.MenuBorderPixel) / 2
   local y1 = (CC.ScreenH - 5 * CC.DefaultFont - 4 * CC.RowPixel - 2 * CC.MenuBorderPixel) / 2
   local r = ShowMenu(menu, 5, 0, x1, y1, 0, 0, 1, 1, CC.DefaultFont, C_ORANGE, C_WHITE)
@@ -40213,12 +40235,14 @@ function instruct_64() --商店
       xx = xx
     end]]
 	local thingid = JY.Shop[id]["物品" .. r]
-    if instruct_31(limitX(math.modf(JY.Thing[thingid]["价钱"] * 1.5), 0, 32000)) == false then
+    if instruct_31(menu[r][5]) == false then
       TalkEx("非常抱歉，*你身上的钱似乎不够．", headid, 0, "商人")
     else
-	    if JY.Shop[id]["物品数量" .. r] == 1 then JY.Shop[id]["物品数量" .. r] = JY.Shop[id]["物品数量" .. r] - 1 end
-	    instruct_32(CC.MoneyID, -limitX(math.modf(JY.Thing[thingid]["价钱"] * 1.5), 0, 32000))
-	    instruct_32(JY.Shop[id]["物品" .. r], 1)
+	    --if JY.Shop[id]["物品数量" .. r] == 1 then JY.Shop[id]["物品数量" .. r] = JY.Shop[id]["物品数量" .. r] - 1 end
+	    --instruct_32(CC.MoneyID, -limitX(math.modf(JY.Thing[thingid]["价钱"] * 1.5), 0, 32000))
+		instruct_32(CC.MoneyID, -menu[r][5])
+	    --instruct_32(JY.Shop[id]["物品" .. r], 1)
+		instruct_32(menu[r][4],1)
 	    TalkEx("大爷买了小店的东西，*保证绝不後悔．", headid, 0, "商人")
 		if thingid==68 and GetS(111,0,0,0) == 0 then
 		TalkEx("大爷我这里还有附带的注解就赠送与你了", headid, 0, "商人")
@@ -58868,7 +58892,7 @@ function ShowPersonStatus_sub_new(id, page,wgoffset)
 end
 
 --战斗会跳出的问题
-GetAtkNum = function(x, y, movfw, atkfw, atk)
+function GetAtkNum(x, y, movfw, atkfw, atk)
   local point = {}
   local num = 0
   local kind, len = movfw[1], movfw[2]

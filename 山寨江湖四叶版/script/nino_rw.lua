@@ -1,6 +1,10 @@
 --  找到使用武功攻击 收益最大的(移动位置、攻击位置)选择
 --		如果找到，则移动到该位置，在该攻击施放位置进行武功攻击
 --		如果找不到，就移动一下，再蓄力防御休息一下
+
+
+
+
 function unnamed(kfid)
 	local pid=WAR.Person[WAR.CurID]["人物编号"]
 	local kungfuid=JY.Person[pid]["武功"..kfid]
