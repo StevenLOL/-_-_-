@@ -314,9 +314,16 @@ function DYRW()
 		if rr > 0 then
 			local ds = {}
 			for i = 0, JY.PersonNum - 1 do
+				if rr==1 then
+				if JY.Person[i]["еепп"] - 2 == rr or (not inteam(i) and duiyou(i) ) then
+					ds[#ds + 1] = i
+				end
+				else
 				if not duiyou(i) and JY.Person[i]["еепп"] - 2 == rr then
 					ds[#ds + 1] = i
 				end
+				end
+				
 			end
 			if #ds < 1 then
 				do return end

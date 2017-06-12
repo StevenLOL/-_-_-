@@ -1,49 +1,47 @@
-01:20:32 JY_Main start.
-01:20:35 [HH_load_PaddedPersonData_1step] [1.3] [fileExist=true]
-01:20:35 [load_GameSetting_from_file] load_file_size=208
-01:20:35 [load_GameSetting_from_file] [Not_Error] [not replace] [because new game_setting file[.\data\\SAVE\\p_sk1.grp] is same as old]
-01:20:35 error:5,64,6,5
-01:20:35 error:5,65,6,5
-01:20:35 error:5,66,6,5
-01:20:35 error:5,67,6,5
-01:20:35 error:5,68,6,5
-01:20:35 error:5,69,6,5
-01:20:35 error:5,70,6,5
-01:20:35 error:5,71,6,5
-01:20:35 error:5,72,6,5
-01:20:35 error:5,73,6,5
-01:20:35 error:5,74,6,5
-01:20:35 error:5,75,6,5
-01:20:35 error:5,76,6,5
-01:20:35 error:5,77,6,5
-01:20:35 error:5,78,6,5
-01:20:35 error:5,79,6,5
-01:20:35 error:5,80,6,5
-01:20:35 error:5,81,6,5
-01:20:35 error:5,82,6,5
-01:20:35 error:5,83,6,5
-01:20:35 error:5,84,6,5
-01:20:35 error:5,85,6,5
-01:20:35 error:5,86,6,5
-01:20:35 error:5,87,6,5
-01:20:35 error:5,88,6,5
-01:20:35 error:5,89,6,5
-01:20:35 error:5,90,6,5
-01:20:35 error:5,91,6,5
-01:20:35 error:5,92,6,5
-01:20:35 Start game cycle
-01:30:30 [store_GameSetting_to_file] store_file_size=208
-01:32:43 [store_GameSetting_to_file] store_file_size=208
-01:32:59 load war map 70
-01:39:00 Pic Cache is full!
-01:40:37 Pic Cache is full!
-01:41:50 Pic Cache is full!
-01:43:30 Pic Cache is full!
-01:45:27 Pic Cache is full!
-01:48:08 Pic Cache is full!
-01:49:04 [store_GameSetting_to_file] store_file_size=208
-01:49:22 load war map 70
-01:51:18 [store_GameSetting_to_file] store_file_size=208
-01:51:21 [store_GameSetting_to_file] store_file_size=208
-01:51:23 [store_GameSetting_to_file] store_file_size=208
-01:51:48 [store_GameSetting_to_file] store_file_size=208
+01:23:20 JY_Main start.
+01:23:23 [HH_load_PaddedPersonData_1step] [1.3] [fileExist=true]
+01:23:23 [load_GameSetting_from_file] load_file_size=208
+01:23:23 [load_GameSetting_from_file] [Not_Error] [not replace] [because new game_setting file[.\data\\SAVE\\p_sk1.grp] is same as old]
+01:23:23 error:5,64,6,5
+01:23:23 error:5,65,6,5
+01:23:23 error:5,66,6,5
+01:23:23 error:5,67,6,5
+01:23:23 error:5,68,6,5
+01:23:23 error:5,69,6,5
+01:23:23 error:5,70,6,5
+01:23:23 error:5,71,6,5
+01:23:23 error:5,72,6,5
+01:23:23 error:5,73,6,5
+01:23:23 error:5,74,6,5
+01:23:23 error:5,75,6,5
+01:23:23 error:5,76,6,5
+01:23:23 error:5,77,6,5
+01:23:23 error:5,78,6,5
+01:23:23 error:5,79,6,5
+01:23:23 error:5,80,6,5
+01:23:23 error:5,81,6,5
+01:23:23 error:5,82,6,5
+01:23:23 error:5,83,6,5
+01:23:23 error:5,84,6,5
+01:23:23 error:5,85,6,5
+01:23:23 error:5,86,6,5
+01:23:23 error:5,87,6,5
+01:23:23 error:5,88,6,5
+01:23:23 error:5,89,6,5
+01:23:23 error:5,90,6,5
+01:23:23 error:5,91,6,5
+01:23:23 error:5,92,6,5
+01:23:23 Start game cycle
+01:23:58 load war map 70
+01:25:26 [store_GameSetting_to_file] store_file_size=208
+01:26:01 load war map 70
+01:27:04 load war map 70
+01:27:49 load war map 70
+01:28:31 [store_GameSetting_to_file] store_file_size=208
+01:28:46 load war map 70
+01:29:41 [store_GameSetting_to_file] store_file_size=208
+01:29:49 load war map 70
+01:31:36 [store_GameSetting_to_file] store_file_size=208
+01:32:07 load war map 70
+01:32:37 load war map 70
+01:34:32 [store_GameSetting_to_file] store_file_size=208
