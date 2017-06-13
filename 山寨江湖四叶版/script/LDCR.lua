@@ -40234,7 +40234,7 @@ function instruct_64() --商店
     if JY.Shop[id]["物品价格" .. r] ~= itemJC[id][r + 5] then
       xx = xx
     end]]
-	local thingid = JY.Shop[id]["物品" .. r]
+	local thingid = menu[r][4]--JY.Shop[id]["物品" .. r]
     if instruct_31(menu[r][5]) == false then
       TalkEx("非常抱歉，*你身上的钱似乎不够．", headid, 0, "商人")
     else
